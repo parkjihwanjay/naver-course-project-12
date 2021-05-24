@@ -1,0 +1,22 @@
+{
+  "Create Functional React Component for next.js": {
+    "prefix": "rtc",
+    "body": [
+      "import React from 'react';",
+      "interface IProps{",
+      "",
+      "}",
+      "const $1: React.FC<IProps> = (props) => {",
+      "	return (",
+      "		<>",
+      "     $2",
+      "		</>",
+      "	)",
+      "}",
+
+      "export default $1;"
+      
+    ],
+    "description": "Create Functional React Component for next.js"
+  },
+}
