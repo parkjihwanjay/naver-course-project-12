@@ -29,19 +29,20 @@ const DragNDrop: React.FC<IProps> = ({ data }) => {
   };
 
   const handleDragEnter = (e: ReactDragEvent, params: IIndexParams): void => {
+    if (e.target === dragNode.current) return;
     const currentItem = dragItem.current;
-    if (e.target !== dragNode.current) {
-      setList((oldList: IColumn[]) => {
-        const newList = JSON.parse(JSON.stringify(oldList));
-        newList[params.grpI].items.splice(
-          params.itemI,
-          0,
-          newList[currentItem.grpI].items.splice(currentItem.itemI, 1)[0],
-        );
-        dragItem.current = params;
-        return newList;
-      });
-    }
+    setList((oldList: IColumn[]) => {
+      const newList = [...oldList];
+      const deletedCard = newList[currentItem.grpI].items.splice(
+        currentItem.itemI,
+        1,
+      )[0];
+
+      newList[params.grpI].items.splice(params.itemI, 0, deletedCard);
+
+      dragItem.current = params;
+      return newList;
+    });
   };
 
   const handleDragEnd = (): void => {
