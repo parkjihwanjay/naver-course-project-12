@@ -1,6 +1,6 @@
 import React from 'react';
 import { DragNDrop } from '@/components';
-import { IColumn } from '@/interfaces';
+import { IColumn } from '@/interfaces/IColumn';
 
 const data: IColumn[] = [
   { title: 'group 1', items: ['1', '2', '3'] },

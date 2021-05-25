@@ -1,4 +1,4 @@
-import { IColumn } from '@/interfaces';
+import { IColumn } from '@/interfaces/IColumn';
 import React, { useState, useRef } from 'react';
 
 interface IProps {
