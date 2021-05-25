@@ -1,10 +1,8 @@
-import Head from 'next/head';
-import Image from 'next/image';
 import React from 'react';
-import styles from '../styles/Home.module.css';
-import DragNDrop from './DragNDrop.js';
+import { DragNDrop } from '@/components';
+import { IColumn } from '@/interfaces';
 
-const data = [
+const data: IColumn[] = [
   { title: 'group 1', items: ['1', '2', '3'] },
   { title: 'group 2', items: ['4', '5'] },
   { title: 'group 3', items: [] },
