@@ -1,25 +1,37 @@
+import { IColumn } from '@/interfaces/IColumn';
 import React, { useState, useRef } from 'react';
 
-function DragNDrop({ data }) {
+interface IProps {
+  data: IColumn[];
+}
+
+interface IIndexParams {
+  grpI: number;
+  itemI: number;
+}
+
+type ReactDragEvent = React.DragEvent<HTMLElement>;
+
+const DragNDrop: React.FC<IProps> = ({ data }) => {
   const [list, setList] = useState(data);
   const [dragging, setDragging] = useState(false);
 
-  const dragItem = useRef();
-  const dragNode = useRef();
+  const dragItem = useRef<IIndexParams>();
+  const dragNode = useRef<EventTarget>();
 
-  const handleDragStart = (e, params) => {
+  const handleDragStart = (e: ReactDragEvent, params: IIndexParams): void => {
     dragItem.current = params;
     dragNode.current = e.target;
     dragNode.current.addEventListener('dragend', handleDragEnd);
     setTimeout(() => {
-      setDragging(true); // 배경만 색깔 바뀌게 하는거
+      setDragging(true);
     }, 0);
   };
 
-  const handleDragEnter = (e, params) => {
+  const handleDragEnter = (e: ReactDragEvent, params: IIndexParams): void => {
     const currentItem = dragItem.current;
     if (e.target !== dragNode.current) {
-      setList((oldList) => {
+      setList((oldList: IColumn[]) => {
         const newList = JSON.parse(JSON.stringify(oldList));
         newList[params.grpI].items.splice(
           params.itemI,
@@ -32,14 +44,14 @@ function DragNDrop({ data }) {
     }
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = (): void => {
     setDragging(false);
     dragNode.current.removeEventListener('dragend', handleDragEnd);
     dragItem.current = null;
     dragNode.current = null;
   };
 
-  const getStyles = (params) => {
+  const getStyles = (params: IIndexParams): string => {
     const currentItem = dragItem.current;
     if (currentItem.grpI === params.grpI && currentItem.itemI === params.itemI)
       return 'current dnd-item';
@@ -85,6 +97,6 @@ function DragNDrop({ data }) {
       ))}
     </div>
   );
-}
+};
 
 export default DragNDrop;
