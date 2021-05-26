@@ -13,7 +13,7 @@
 **Common**
 
 - ![title](https://img.shields.io/badge/-TypeScript-007ACC?&logo=TypeScript&logoColor=white)
-- ![title](https://img.shields.io/badge/-Yarn-CB3837?&logo=Yarn&logoColor=white)
+- ![title](https://img.shields.io/badge/-NPM-CB3837?&logo=Npm&logoColor=white)
 - ![title](https://img.shields.io/badge/-ESLint-4B32C3?&logo=ESLint&logoColor=white)
 - ![title](https://img.shields.io/badge/-Prettier-F7B93E?&logo=Prettier&logoColor=white)
 
