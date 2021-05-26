@@ -1,4 +1,6 @@
+import { ICard } from './ICard';
+
 export interface IColumn {
   title: string;
-  items: string[];
+  items: ICard;
 }
