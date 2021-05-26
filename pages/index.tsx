@@ -1,18 +1,17 @@
 import React from 'react';
 import { DragNDrop } from '@/components';
-import { IColumn } from '@/interfaces/IColumn';
-
-const data: IColumn[] = [
-  { title: 'group 1', items: ['1', '2', '3'] },
-  { title: 'group 2', items: ['4', '5'] },
-  { title: 'group 3', items: [] },
-];
+import useRedux from '@/hooks/redux';
+import { addColumnAction } from '@/store/modules/CardList';
 
 const Home: React.FC = () => {
+  const { dispatch } = useRedux();
+  const addColumn = (title = '') => {
+    dispatch(addColumnAction({ items: [], title }));
+  };
   return (
     <div className="App">
       <header className="App-header">
-        <DragNDrop data={data} />
+        <DragNDrop addColumn={addColumn} />
       </header>
     </div>
   );
