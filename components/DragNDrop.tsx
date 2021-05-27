@@ -1,8 +1,9 @@
-import { IColumn } from '@/interfaces/IColumn';
+import useRedux from '@/hooks/redux';
 import React, { useState, useRef } from 'react';
+import { setCardListAction } from '@/store/modules/CardList';
 
 interface IProps {
-  data: IColumn[];
+  addColumn: (title: string) => void;
 }
 
 interface IIndexParams {
@@ -12,8 +13,9 @@ interface IIndexParams {
 
 type ReactDragEvent = React.DragEvent<HTMLElement>;
 
-const DragNDrop: React.FC<IProps> = ({ data }) => {
-  const [list, setList] = useState(data);
+const DragNDrop: React.FC<IProps> = ({ addColumn }) => {
+  const { useAppSelector, dispatch } = useRedux();
+  const cardList = useAppSelector((state) => state.cardList);
   const [dragging, setDragging] = useState(false);
 
   const dragItem = useRef<IIndexParams>();
@@ -31,18 +33,8 @@ const DragNDrop: React.FC<IProps> = ({ data }) => {
   const handleDragEnter = (e: ReactDragEvent, params: IIndexParams): void => {
     if (e.target === dragNode.current) return;
     const currentItem = dragItem.current;
-    setList((oldList: IColumn[]) => {
-      const newList = [...oldList];
-      const deletedCard = newList[currentItem.grpI].items.splice(
-        currentItem.itemI,
-        1,
-      )[0];
-
-      newList[params.grpI].items.splice(params.itemI, 0, deletedCard);
-
-      dragItem.current = params;
-      return newList;
-    });
+    dispatch(setCardListAction({ currentItem, params }));
+    dragItem.current = params;
   };
 
   const handleDragEnd = (): void => {
@@ -62,20 +54,20 @@ const DragNDrop: React.FC<IProps> = ({ data }) => {
 
   return (
     <div className="drag-n-drop">
-      {list.map((grp, grpI) => (
+      {cardList.map((card, grpI) => (
         <div
-          key={grp.title}
+          key={card.title}
           className="dnd-group"
           onDragEnter={
-            dragging && !grp.items.length
+            dragging && !card.items.length
               ? (e) => {
                   handleDragEnter(e, { grpI, itemI: 0 });
                 }
               : null
           }
         >
-          <div className="group-title">{grp.title}</div>
-          {grp.items.map((item, itemI) => (
+          <div className="group-title">{card.title}</div>
+          {card.items.map((item, itemI) => (
             <div
               draggable
               onDragStart={(e) => {
@@ -96,6 +88,7 @@ const DragNDrop: React.FC<IProps> = ({ data }) => {
           ))}
         </div>
       ))}
+      <input type="button" value="plus" onClick={() => addColumn('group-5')} />
     </div>
   );
 };
