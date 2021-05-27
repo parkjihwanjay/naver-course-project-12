@@ -1,12 +1,12 @@
 /* eslint-disable no-param-reassign */
 import useRedux from '@/hooks/redux';
 import React, { useState, useRef, SyntheticEvent } from 'react';
-import { setCardListAction } from '@/store/modules/CardList';
 import { IColumn } from '@/interfaces/IColumn';
 import { ICardList } from '@/interfaces/ICardList';
 
 interface IProps {
   addColumn: (title: string) => void;
+  setCardList: (dragCallBack: (newList: ICardList) => void) => void;
 }
 
 interface IDragParams {
@@ -21,8 +21,8 @@ const preventEvent = (e: SyntheticEvent) => {
   e.preventDefault();
 };
 
-const DragNDrop: React.FC<IProps> = ({ addColumn }) => {
-  const { useAppSelector, dispatch } = useRedux();
+const DragNDrop: React.FC<IProps> = ({ addColumn, setCardList }) => {
+  const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
   const [dragging, setDragging] = useState(false);
 
@@ -60,7 +60,7 @@ const DragNDrop: React.FC<IProps> = ({ addColumn }) => {
         newList[columnIndex].items.splice(cardIndex, 0, newList[dragGrpI].items.splice(dragItem.current.cardIndex, 1)[0]);
         dragItem.current = { column, cardIndex, columnIndex };
       };
-      dispatch(setCardListAction({ dragCallBack }));
+      setCardList(dragCallBack);
     } else {
       const dragCallBack = (newList: ICardList) => {
         const grpI = newList.findIndex((el) => el.title === column.title);
@@ -69,7 +69,7 @@ const DragNDrop: React.FC<IProps> = ({ addColumn }) => {
         newList[grpI] = newList[dragGrpI];
         newList[dragGrpI] = temp;
       };
-      dispatch(setCardListAction({ dragCallBack }));
+      setCardList(dragCallBack);
     }
   };
 
