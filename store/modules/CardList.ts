@@ -1,33 +1,33 @@
+/* eslint-disable no-param-reassign */
 import { ICard } from '@/interfaces/ICard';
-import { ICardList } from '@/interfaces/ICardList';
+import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
+import { IColumn } from '@/interfaces/IColumn';
+import { swapItem } from '@/utils';
 import { Action, createSlice, CreateSliceOptions, PayloadAction } from '@reduxjs/toolkit';
-
-const dummyData: ICardList = [
-  { title: 'group 1', items: ['1', '2', '3'] },
-  { title: 'group 2', items: ['4', '5'] },
-  { title: 'group 3', items: [] },
-];
+import { cardList } from '@/data';
 
 interface IAddColumnPayload {
   title: string;
   items: ICard;
 }
 
-interface ISetCardListPayload {
-  dragCallBack: (state: ICardList) => void;
-}
-
 const reducers: CreateSliceOptions['reducers'] = {
   addColumn: (state: ICardList, action: PayloadAction<IAddColumnPayload>) => {
     state.push({ title: action.payload.title, items: action.payload.items });
   },
-  setCardList: (state: ICardList, action: PayloadAction<ISetCardListPayload>) => {
-    const { dragCallBack } = action.payload;
-    dragCallBack(state);
+  dragCard: (state: ICardList, action: PayloadAction<IDragCardPayload>) => {
+    const { columnIndex, cardIndex, dragGrpI, dragItemCardIndex } = action.payload;
+    state[columnIndex].items.splice(cardIndex, 0, state[dragGrpI].items.splice(dragItemCardIndex, 1)[0]);
+  },
+  dragColumn: (state: ICardList, action: PayloadAction<IDragColumnPayload>) => {
+    const { targetColumnTitle, dragColumnTitle } = action.payload;
+    const grpI = state.findIndex((el) => el.title === targetColumnTitle);
+    const dragGrpI = state.findIndex((el) => el.title === dragColumnTitle);
+    swapItem<IColumn>(state, grpI, dragGrpI);
   },
 };
 
-const initialState = dummyData;
+const initialState = cardList;
 
 const cardListSlice = createSlice({
   name: 'cardList',
@@ -35,10 +35,10 @@ const cardListSlice = createSlice({
   reducers,
 });
 
-const { addColumn, setCardList } = cardListSlice.actions;
+const { addColumn, dragColumn, dragCard } = cardListSlice.actions;
 
 export const addColumnAction = (payload: IAddColumnPayload): Action => addColumn(payload);
-
-export const setCardListAction = (payload: ISetCardListPayload): Action => setCardList(payload);
+export const dragCardAction = (payload: IDragCardPayload): Action => dragCard(payload);
+export const dragColumnAction = (payload: IDragColumnPayload): Action => dragColumn(payload);
 
 export default cardListSlice.reducer;
