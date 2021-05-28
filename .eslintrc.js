@@ -22,10 +22,7 @@ module.exports = {
     'no-shadow': 'off',
     'prettier/prettier': 'error',
     'import/extensions': ['off'],
-    'react/jsx-filename-extension': [
-      2,
-      { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
-    ],
+    'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'no-use-before-define': 'off',
     'react/prop-types': 'off',
     'import/no-unresolved': 'off',

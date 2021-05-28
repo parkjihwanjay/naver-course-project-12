@@ -2,11 +2,12 @@
 import useRedux from '@/hooks/redux';
 import React, { useState, useRef, SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
-import { ICardList } from '@/interfaces/ICardList';
+import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 
 interface IProps {
   addColumn: (title: string) => void;
-  setCardList: (dragCallBack: (newList: ICardList) => void) => void;
+  handleDragCard: (payload: IDragCardPayload) => void;
+  handleDragColumn: (payload: IDragColumnPayload) => void;
 }
 
 interface IDragParams {
@@ -21,7 +22,7 @@ const preventEvent = (e: SyntheticEvent) => {
   e.preventDefault();
 };
 
-const DragNDrop: React.FC<IProps> = ({ addColumn, setCardList }) => {
+const DragNDrop: React.FC<IProps> = ({ addColumn, handleDragCard, handleDragColumn }) => {
   const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
   const [dragging, setDragging] = useState(false);
@@ -56,20 +57,11 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, setCardList }) => {
 
     if (dragging) {
       const dragGrpI = dragItem.current.columnIndex;
-      const dragCallBack = (newList: ICardList) => {
-        newList[columnIndex].items.splice(cardIndex, 0, newList[dragGrpI].items.splice(dragItem.current.cardIndex, 1)[0]);
-        dragItem.current = { column, cardIndex, columnIndex };
-      };
-      setCardList(dragCallBack);
+      const dragItemCardIndex = dragItem.current.cardIndex;
+      handleDragCard({ columnIndex, cardIndex, dragGrpI, dragItemCardIndex });
+      dragItem.current = { column, cardIndex, columnIndex };
     } else {
-      const dragCallBack = (newList: ICardList) => {
-        const grpI = newList.findIndex((el) => el.title === column.title);
-        const dragGrpI = newList.findIndex((el) => el.title === dragColumn.current.column.title);
-        const temp = newList[grpI];
-        newList[grpI] = newList[dragGrpI];
-        newList[dragGrpI] = temp;
-      };
-      setCardList(dragCallBack);
+      handleDragColumn({ targetColumnTitle: column.title, dragColumnTitle: dragColumn.current.column.title });
     }
   };
 
@@ -96,8 +88,8 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, setCardList }) => {
         <div
           key={column.title}
           draggable
-          onDragEnter={(e) => handleDragEnter(e, { column, cardIndex: 0, columnIndex })}
           className="dnd-group"
+          onDragEnter={(e) => handleDragEnter(e, { column, cardIndex: 0, columnIndex })}
           onDragStart={(e) => handleDragStart(e, { column, cardIndex: 0, columnIndex })}
           onDragOver={preventEvent}
           onDragEnd={initialize}
