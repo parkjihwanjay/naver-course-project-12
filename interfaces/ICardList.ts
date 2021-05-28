@@ -5,7 +5,7 @@ export type ICardList = IColumn[];
 export interface IDragCardPayload {
   columnIndex: number;
   cardIndex: number;
-  dragGrpI: number;
+  dragColumnIndex: number;
   dragItemCardIndex: number;
 }
 
