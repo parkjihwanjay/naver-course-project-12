@@ -1,89 +1,120 @@
+/* eslint-disable no-param-reassign */
 import useRedux from '@/hooks/redux';
-import React, { useState, useRef } from 'react';
-import { setCardListAction } from '@/store/modules/CardList';
+import React, { useState, useRef, SyntheticEvent } from 'react';
+import { IColumn } from '@/interfaces/IColumn';
+import { ICardList } from '@/interfaces/ICardList';
 
 interface IProps {
   addColumn: (title: string) => void;
+  setCardList: (dragCallBack: (newList: ICardList) => void) => void;
 }
 
-interface IIndexParams {
-  grpI: number;
-  itemI: number;
+interface IDragParams {
+  column: IColumn;
+  cardIndex: number;
+  columnIndex: number;
 }
 
 type ReactDragEvent = React.DragEvent<HTMLElement>;
 
-const DragNDrop: React.FC<IProps> = ({ addColumn }) => {
-  const { useAppSelector, dispatch } = useRedux();
-  const cardList = useAppSelector((state) => state.cardList);
+const preventEvent = (e: SyntheticEvent) => {
+  e.preventDefault();
+};
+
+const DragNDrop: React.FC<IProps> = ({ addColumn, setCardList }) => {
+  const { useAppSelector } = useRedux();
+  const list = useAppSelector((state) => state.cardList);
   const [dragging, setDragging] = useState(false);
 
-  const dragItem = useRef<IIndexParams>();
-  const dragNode = useRef<EventTarget>();
+  const dragItem = useRef<IDragParams>();
+  const dragItemNode = useRef<EventTarget>();
+  const dragColumn = useRef<IDragParams>();
+  const dragColumnNode = useRef<EventTarget>();
 
-  const handleDragStart = (e: ReactDragEvent, params: IIndexParams): void => {
-    dragItem.current = params;
-    dragNode.current = e.target;
-    dragNode.current.addEventListener('dragend', handleDragEnd);
-    setTimeout(() => {
-      setDragging(true);
-    }, 0);
+  const handleDragStart = (e: ReactDragEvent, { column, cardIndex, columnIndex }: IDragParams): void => {
+    e.stopPropagation();
+    const target = e.target as Element;
+
+    if (target.className === 'dnd-group') {
+      dragColumn.current = { column, cardIndex, columnIndex };
+      dragColumnNode.current = target;
+      setTimeout(() => {
+        setDragging(false);
+      }, 0);
+    } else {
+      dragItemNode.current = target;
+      dragItem.current = { column, cardIndex, columnIndex };
+      setTimeout(() => {
+        setDragging(true);
+      }, 0);
+    }
   };
 
-  const handleDragEnter = (e: ReactDragEvent, params: IIndexParams): void => {
-    if (e.target === dragNode.current) return;
-    const currentItem = dragItem.current;
-    dispatch(setCardListAction({ currentItem, params }));
-    dragItem.current = params;
+  const handleDragEnter = (e: ReactDragEvent, { column, cardIndex, columnIndex }: IDragParams): void => {
+    e.stopPropagation();
+    if (dragItemNode.current === e.target) return;
+
+    if (dragging) {
+      const dragGrpI = dragItem.current.columnIndex;
+      const dragCallBack = (newList: ICardList) => {
+        newList[columnIndex].items.splice(cardIndex, 0, newList[dragGrpI].items.splice(dragItem.current.cardIndex, 1)[0]);
+        dragItem.current = { column, cardIndex, columnIndex };
+      };
+      setCardList(dragCallBack);
+    } else {
+      const dragCallBack = (newList: ICardList) => {
+        const grpI = newList.findIndex((el) => el.title === column.title);
+        const dragGrpI = newList.findIndex((el) => el.title === dragColumn.current.column.title);
+        const temp = newList[grpI];
+        newList[grpI] = newList[dragGrpI];
+        newList[dragGrpI] = temp;
+      };
+      setCardList(dragCallBack);
+    }
   };
 
-  const handleDragEnd = (): void => {
+  const initialize = (e: SyntheticEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
     setDragging(false);
-    dragNode.current.removeEventListener('dragend', handleDragEnd);
     dragItem.current = null;
-    dragNode.current = null;
+    dragItemNode.current = null;
+    dragColumn.current = null;
+    dragColumnNode.current = null;
   };
 
-  const getStyles = (params: IIndexParams): string => {
+  const getStyles = (params: IDragParams): string => {
     const currentItem = dragItem.current;
-    if (currentItem.grpI === params.grpI && currentItem.itemI === params.itemI)
-      return 'current dnd-item';
+    if (currentItem.columnIndex === params.columnIndex && currentItem.cardIndex === params.cardIndex) return 'current dnd-item';
 
     return 'dnd-item';
   };
 
   return (
     <div className="drag-n-drop">
-      {cardList.map((card, grpI) => (
+      {list.map((column, columnIndex) => (
         <div
-          key={card.title}
+          key={column.title}
+          draggable
+          onDragEnter={(e) => handleDragEnter(e, { column, cardIndex: 0, columnIndex })}
           className="dnd-group"
-          onDragEnter={
-            dragging && !card.items.length
-              ? (e) => {
-                  handleDragEnter(e, { grpI, itemI: 0 });
-                }
-              : null
-          }
+          onDragStart={(e) => handleDragStart(e, { column, cardIndex: 0, columnIndex })}
+          onDragOver={preventEvent}
+          onDragEnd={initialize}
+          onDrop={initialize}
         >
-          <div className="group-title">{card.title}</div>
-          {card.items.map((item, itemI) => (
+          {column.items.map((card, cardIndex) => (
             <div
               draggable
-              onDragStart={(e) => {
-                handleDragStart(e, { grpI, itemI });
-              }}
-              onDragEnter={
-                dragging
-                  ? (e) => {
-                      handleDragEnter(e, { grpI, itemI });
-                    }
-                  : null
-              }
-              key={item}
-              className={dragging ? getStyles({ grpI, itemI }) : 'dnd-item'}
+              key={card}
+              className={dragging ? getStyles({ column, columnIndex, cardIndex }) : 'dnd-item'}
+              onDragStart={(e) => handleDragStart(e, { column, cardIndex, columnIndex })}
+              onDragEnter={(e) => handleDragEnter(e, { column, cardIndex, columnIndex })}
+              onDragOver={preventEvent}
+              onDragEnd={initialize}
+              onDrop={initialize}
             >
-              {item}
+              {card}
             </div>
           ))}
         </div>

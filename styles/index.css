@@ -39,6 +39,7 @@
   
   .dnd-item {
     display: flex;
+    height: 250px;
     justify-content: center;
     align-items: center;
     min-height: 100px;
