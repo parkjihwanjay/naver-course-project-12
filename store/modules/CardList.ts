@@ -16,14 +16,14 @@ const reducers: CreateSliceOptions['reducers'] = {
     state.push({ title: action.payload.title, items: action.payload.items });
   },
   dragCard: (state: ICardList, action: PayloadAction<IDragCardPayload>) => {
-    const { columnIndex, cardIndex, dragGrpI, dragItemCardIndex } = action.payload;
-    state[columnIndex].items.splice(cardIndex, 0, state[dragGrpI].items.splice(dragItemCardIndex, 1)[0]);
+    const { columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex } = action.payload;
+    state[columnIndex].items.splice(cardIndex, 0, state[dragColumnIndex].items.splice(dragItemCardIndex, 1)[0]);
   },
   dragColumn: (state: ICardList, action: PayloadAction<IDragColumnPayload>) => {
     const { targetColumnTitle, dragColumnTitle } = action.payload;
     const grpI = state.findIndex((el) => el.title === targetColumnTitle);
-    const dragGrpI = state.findIndex((el) => el.title === dragColumnTitle);
-    swapItem<IColumn>(state, grpI, dragGrpI);
+    const dragColumnIndex = state.findIndex((el) => el.title === dragColumnTitle);
+    swapItem<IColumn>(state, grpI, dragColumnIndex);
   },
 };
 
