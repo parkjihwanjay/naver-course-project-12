@@ -6,6 +6,7 @@ import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/IC
 
 interface IProps {
   addColumn: (title: string) => void;
+  deleteColumn: (title: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
 }
@@ -22,7 +23,7 @@ const preventEvent = (e: SyntheticEvent) => {
   e.preventDefault();
 };
 
-const DragNDrop: React.FC<IProps> = ({ addColumn, handleDragCard, handleDragColumn }) => {
+const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, handleDragCard, handleDragColumn }) => {
   const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
   const [dragging, setDragging] = useState(false);
@@ -95,6 +96,10 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, handleDragCard, handleDragColu
           onDragEnd={initialize}
           onDrop={initialize}
         >
+          <div>
+            <div>{column.title}</div>
+            <input type="button" value="delete" onClick={() => deleteColumn(column.title)} />
+          </div>
           {column.items.map((card, cardIndex) => (
             <div
               draggable
