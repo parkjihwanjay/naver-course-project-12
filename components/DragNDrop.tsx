@@ -3,10 +3,13 @@ import useRedux from '@/hooks/redux';
 import React, { useState, useRef, SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
+import { TextInput } from '@/components';
 
 interface IProps {
   addColumn: (title: string) => void;
   deleteColumn: (title: string) => void;
+  editColumnStart: (title: string, columnIndex: number) => void;
+  editColumnSave: (title: string, columnIndex: number, newTitle: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
 }
@@ -17,13 +20,18 @@ interface IDragParams {
   columnIndex: number;
 }
 
+interface IEditColumnParams {
+  column: IColumn;
+  columnIndex: number;
+}
+
 type ReactDragEvent = React.DragEvent<HTMLElement>;
 
 const preventEvent = (e: SyntheticEvent) => {
   e.preventDefault();
 };
 
-const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, handleDragCard, handleDragColumn }) => {
+const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart, editColumnSave, handleDragCard, handleDragColumn }) => {
   const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
   const [dragging, setDragging] = useState(false);
@@ -32,6 +40,7 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, handleDragCard, 
   const dragItemNode = useRef<EventTarget>();
   const dragColumn = useRef<IDragParams>();
   const dragColumnNode = useRef<EventTarget>();
+  const editingColumnTitle = useRef<HTMLInputElement>();
 
   const handleDragStart = (e: ReactDragEvent, { column, cardIndex, columnIndex }: IDragParams): void => {
     e.stopPropagation();
@@ -66,6 +75,12 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, handleDragCard, 
     }
   };
 
+  const handleEditColumnStart = (e: SyntheticEvent, { column, columnIndex }: IEditColumnParams): void => {
+    editColumnStart(column.title, columnIndex);
+  };
+  const handleEditColumnSave = (e: SyntheticEvent, newTitle: string, { column, columnIndex }: IEditColumnParams): void => {
+    editColumnSave(column.title, columnIndex, newTitle);
+  };
   const initialize = (e: SyntheticEvent): void => {
     e.preventDefault();
     e.stopPropagation();
@@ -83,6 +98,12 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, handleDragCard, 
     return 'dnd-item';
   };
 
+  const getHiddenStyles = (isEditing: boolean, elementType: string): string => {
+    const divClass = isEditing ? 'hidden' : '';
+    const inputClass = isEditing ? '' : 'hidden';
+    return elementType === 'div' ? divClass : inputClass;
+  };
+
   return (
     <div className="drag-n-drop">
       {list.map((column, columnIndex) => (
@@ -97,7 +118,15 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, handleDragCard, 
           onDrop={initialize}
         >
           <div>
-            <div>{column.title}</div>
+            <TextInput
+              defaultValue={column.title}
+              className={getHiddenStyles(column.isEditing, 'input')}
+              onKeyDown={(e, newTitle) => handleEditColumnSave(e, newTitle, { column, columnIndex })}
+              onMouseDown={(e, newTitle) => handleEditColumnSave(e, newTitle, { column, columnIndex })}
+            />
+            <div className={getHiddenStyles(column.isEditing, 'div')} onClick={(e) => handleEditColumnStart(e, { column, columnIndex })}>
+              {column.title}
+            </div>
             <input type="button" value="delete" onClick={() => deleteColumn(column.title)} />
           </div>
           {column.items.map((card, cardIndex) => (
