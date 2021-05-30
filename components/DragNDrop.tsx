@@ -40,7 +40,6 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart,
   const dragItemNode = useRef<EventTarget>();
   const dragColumn = useRef<IDragParams>();
   const dragColumnNode = useRef<EventTarget>();
-  const editingColumnTitle = useRef<HTMLInputElement>();
 
   const handleDragStart = (e: ReactDragEvent, { column, cardIndex, columnIndex }: IDragParams): void => {
     e.stopPropagation();
@@ -75,10 +74,10 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart,
     }
   };
 
-  const handleEditColumnStart = (e: SyntheticEvent, { column, columnIndex }: IEditColumnParams): void => {
+  const handleEditColumnStart = ({ column, columnIndex }: IEditColumnParams): void => {
     editColumnStart(column.title, columnIndex);
   };
-  const handleEditColumnSave = (e: SyntheticEvent, newTitle: string, { column, columnIndex }: IEditColumnParams): void => {
+  const handleEditColumnSave = (newTitle: string, { column, columnIndex }: IEditColumnParams): void => {
     editColumnSave(column.title, columnIndex, newTitle);
   };
   const initialize = (e: SyntheticEvent): void => {
@@ -98,12 +97,6 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart,
     return 'dnd-item';
   };
 
-  const getHiddenStyles = (isEditing: boolean, elementType: string): string => {
-    const divClass = isEditing ? 'hidden' : '';
-    const inputClass = isEditing ? '' : 'hidden';
-    return elementType === 'div' ? divClass : inputClass;
-  };
-
   return (
     <div className="drag-n-drop">
       {list.map((column, columnIndex) => (
@@ -118,15 +111,11 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart,
           onDrop={initialize}
         >
           <div>
-            <TextInput
-              defaultValue={column.title}
-              className={getHiddenStyles(column.isEditing, 'input')}
-              onKeyDown={(e, newTitle) => handleEditColumnSave(e, newTitle, { column, columnIndex })}
-              onMouseDown={(e, newTitle) => handleEditColumnSave(e, newTitle, { column, columnIndex })}
-            />
-            <div className={getHiddenStyles(column.isEditing, 'div')} onClick={(e) => handleEditColumnStart(e, { column, columnIndex })}>
-              {column.title}
-            </div>
+            {column.isEditing ? (
+              <TextInput defaultValue={column.title} handleColumnSave={(newTitle) => handleEditColumnSave(newTitle, { column, columnIndex })} />
+            ) : (
+              <div onClick={(e) => handleEditColumnStart({ column, columnIndex })}>{column.title}</div>
+            )}
             <input type="button" value="delete" onClick={() => deleteColumn(column.title)} />
           </div>
           {column.items.map((card, cardIndex) => (
