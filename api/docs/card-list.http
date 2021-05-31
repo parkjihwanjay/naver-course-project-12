@@ -1,0 +1,16 @@
+GET http://localhost:3000/api/card-list HTTP/1.1
+content-type: application/json
+
+# Response : get cardList
+
+# [
+#   {
+#     "id": "1",
+#     "title": "group 1",
+#     "items": [
+#       "1",
+#       "2",
+#       "3"
+#     ]
+#   }
+# ]
