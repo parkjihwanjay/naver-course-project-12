@@ -86,7 +86,7 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, handleDragCard, handleDragColu
     <div className="drag-n-drop">
       {list.map((column, columnIndex) => (
         <div
-          key={column.title}
+          key={column.id}
           draggable
           className="dnd-group"
           onDragEnter={(e) => handleDragEnter(e, { column, cardIndex: 0, columnIndex })}
