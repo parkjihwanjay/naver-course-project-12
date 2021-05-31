@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DragNDrop } from '@/components';
 import useRedux from '@/hooks/redux';
-import { addColumnAction, dragCardAction, dragColumnAction } from '@/store/modules/CardList';
+import { dragCardAction, dragColumnAction, addColumnThunk, initializeThunk } from '@/store/modules/CardList';
 import { IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 
 const Home: React.FC = () => {
   const { dispatch } = useRedux();
   const addColumn = (title = '') => {
-    dispatch(addColumnAction({ items: [], title }));
+    dispatch(addColumnThunk(title, []));
+    // dispatch(addColumnAction({ items: [], title }));
   };
   const handleDragCard = (payload: IDragCardPayload) => {
     dispatch(dragCardAction(payload));
@@ -15,6 +16,10 @@ const Home: React.FC = () => {
   const handleDragColumn = (payload: IDragColumnPayload) => {
     dispatch(dragColumnAction(payload));
   };
+
+  useEffect(() => {
+    dispatch(initializeThunk());
+  }, []);
 
   return (
     <div className="App">
