@@ -13,7 +13,6 @@ interface IAddColumnPayload {
   title: string;
   items: ICard;
   id: string;
-  isEditing: boolean;
 }
 interface IDeleteColumnPayload {
   title: string;
@@ -34,8 +33,8 @@ const reducers: CreateSliceOptions['reducers'] = {
     return action.payload;
   },
   addColumn: (state: ICardList, action: PayloadAction<IAddColumnPayload>) => {
-    const { title, items, id, isEditing } = action.payload;
-    state.push({ id, title, items, isEditing });
+    const { title, items, id } = action.payload;
+    state.push({ id, title, items, isEditing: false });
   },
   deleteColumn: (state: ICardList, action: PayloadAction<IDeleteColumnPayload>) => {
     const deleteColumnTitle = action.payload.title;
