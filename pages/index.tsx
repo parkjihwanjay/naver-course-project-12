@@ -16,8 +16,7 @@ import { IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 const Home: React.FC = () => {
   const { dispatch } = useRedux();
   const addColumn = (title = '') => {
-    // dispatch(addColumnThunk(title, []));
-    dispatch(addColumnAction({ items: [], title, isEditing: true }));
+    dispatch(addColumnThunk(title, []));
   };
   const deleteColumn = (title) => {
     dispatch(deleteColumnAction({ title }));
