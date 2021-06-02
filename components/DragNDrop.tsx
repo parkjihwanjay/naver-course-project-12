@@ -2,7 +2,7 @@
 import useRedux from '@/hooks/redux';
 import React, { useState, useRef, SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
-import { IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
+import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 import { TextInput } from '@/components';
 
 interface IProps {
@@ -12,6 +12,8 @@ interface IProps {
   editColumnSave: (title: string, columnIndex: number, newTitle: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
+  handleDropColumn: (list: ICardList) => void;
+  handleDropCard: (list: ICardList) => void;
 }
 
 interface IDragParams {
@@ -31,7 +33,16 @@ const preventEvent = (e: SyntheticEvent) => {
   e.preventDefault();
 };
 
-const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart, editColumnSave, handleDragCard, handleDragColumn }) => {
+const DragNDrop: React.FC<IProps> = ({
+  addColumn,
+  deleteColumn,
+  editColumnStart,
+  editColumnSave,
+  handleDragCard,
+  handleDragColumn,
+  handleDropColumn,
+  handleDropCard,
+}) => {
   const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
   const [dragging, setDragging] = useState(false);
@@ -43,35 +54,44 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart,
 
   const handleDragStart = (e: ReactDragEvent, { column, cardIndex, columnIndex }: IDragParams): void => {
     e.stopPropagation();
-    const target = e.target as Element;
+    const target = e.currentTarget;
 
     if (target.className === 'dnd-group') {
       dragColumn.current = { column, cardIndex, columnIndex };
       dragColumnNode.current = target;
-      setTimeout(() => {
-        setDragging(false);
-      }, 0);
+      setDragging(false);
     } else {
       dragItemNode.current = target;
       dragItem.current = { column, cardIndex, columnIndex };
-      setTimeout(() => {
-        setDragging(true);
-      }, 0);
+      setDragging(true);
     }
   };
 
   const handleDragEnter = (e: ReactDragEvent, { column, cardIndex, columnIndex }: IDragParams): void => {
     e.stopPropagation();
-    if (dragItemNode.current === e.target) return;
-
     if (dragging) {
+      const target = e.currentTarget;
+      if (dragItemNode.current === target) return;
+      if (column.items.length && target.className === 'dnd-group') return;
+      if (dragItemNode.current.dataset.id === target.dataset.id) return;
       const dragColumnIndex = dragItem.current.columnIndex;
       const dragItemCardIndex = dragItem.current.cardIndex;
       handleDragCard({ columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex });
       dragItem.current = { column, cardIndex, columnIndex };
     } else {
+      if (column.id === dragColumn.current.column.id) return;
       handleDragColumn({ targetColumnId: column.id, dragColumnId: dragColumn.current.column.id });
     }
+  };
+
+  const handleDrop = (e: SyntheticEvent) => {
+    handleDropColumn(list);
+    initialize(e);
+  };
+
+  const handleCardDrop = (e: SyntheticEvent) => {
+    handleDropCard(list);
+    initialize(e);
   };
 
   const handleEditColumnStart = ({ column, columnIndex }: IEditColumnParams): void => {
@@ -108,7 +128,7 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart,
           onDragStart={(e) => handleDragStart(e, { column, cardIndex: 0, columnIndex })}
           onDragOver={preventEvent}
           onDragEnd={initialize}
-          onDrop={initialize}
+          onDrop={handleDrop}
         >
           <div>
             {column.isEditing ? (
@@ -121,15 +141,16 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart,
           {column.items.map((card, cardIndex) => (
             <div
               draggable
-              key={card}
+              data-id={card.id}
+              key={card.id}
               className={dragging ? getStyles({ column, columnIndex, cardIndex }) : 'dnd-item'}
               onDragStart={(e) => handleDragStart(e, { column, cardIndex, columnIndex })}
               onDragEnter={(e) => handleDragEnter(e, { column, cardIndex, columnIndex })}
               onDragOver={preventEvent}
               onDragEnd={initialize}
-              onDrop={initialize}
+              onDrop={(e) => handleCardDrop(e)}
             >
-              {card}
+              {card.content}
             </div>
           ))}
         </div>
