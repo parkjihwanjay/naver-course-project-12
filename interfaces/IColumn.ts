@@ -1,8 +1,8 @@
-import { ICard } from './ICard';
+import { ICardItems } from './ICard';
 
 export interface IColumn {
   id: string;
   title: string;
-  items: ICard;
+  items: ICardItems;
   isEditing: boolean;
 }

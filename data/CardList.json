@@ -1,1 +1,1 @@
-[{"id":"1","title":"edit-test-title","items":["1","2","3"]},{"id":"2","title":"edit-test-title","items":["4","5"]},{"title":"group-5","items":[],"id":"3"}]
+[{"title":"group-5","items":[{"id":"5","content":"5"},{"id":"2","content":"2"}],"id":"3"},{"id":"2","title":"edit-test-title","items":[{"id":"1","content":"1"},{"id":"4","content":"4"}]},{"id":"1","title":"edit-test-title","items":[{"id":"3","content":"3"}]}]
