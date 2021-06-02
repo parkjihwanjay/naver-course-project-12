@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import { DragNDrop } from '@/components';
 import useRedux from '@/hooks/redux';
 import {
-  addColumnAction,
   deleteColumnAction,
   editColumnStartAction,
   editColumnSaveAction,
-  dragCardAction,
-  dragColumnAction,
   addColumnThunk,
   initializeThunk,
+  dragColumnThunk,
+  dragCardThunk,
 } from '@/store/modules/CardList';
-import { IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
+import { dragCardDTO } from '@/interfaces/api/card';
+import { dragColumnDTO } from '@/interfaces/api/column';
 
 const Home: React.FC = () => {
   const { dispatch } = useRedux();
@@ -27,11 +27,11 @@ const Home: React.FC = () => {
   const editColumnSave = (title, columnIndex, newTitle) => {
     dispatch(editColumnSaveAction({ title, columnIndex, newTitle }));
   };
-  const handleDragCard = (payload: IDragCardPayload) => {
-    dispatch(dragCardAction(payload));
+  const handleDragCard = (payload: dragCardDTO) => {
+    dispatch(dragCardThunk(payload));
   };
-  const handleDragColumn = (payload: IDragColumnPayload) => {
-    dispatch(dragColumnAction(payload));
+  const handleDragColumn = (payload: dragColumnDTO) => {
+    dispatch(dragColumnThunk(payload));
   };
 
   useEffect(() => {
