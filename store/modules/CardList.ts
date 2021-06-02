@@ -28,9 +28,9 @@ const reducers: CreateSliceOptions['reducers'] = {
     state[columnIndex].items.splice(cardIndex, 0, state[dragColumnIndex].items.splice(dragItemCardIndex, 1)[0]);
   },
   dragColumn: (state: ICardList, action: PayloadAction<IDragColumnPayload>) => {
-    const { targetColumnTitle, dragColumnTitle } = action.payload;
-    const grpI = state.findIndex((el) => el.title === targetColumnTitle);
-    const dragColumnIndex = state.findIndex((el) => el.title === dragColumnTitle);
+    const { targetColumnId, dragColumnId } = action.payload;
+    const grpI = state.findIndex((el) => el.id === targetColumnId);
+    const dragColumnIndex = state.findIndex((el) => el.id === dragColumnId);
     swapItem<IColumn>(state, grpI, dragColumnIndex);
   },
 };

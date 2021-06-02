@@ -61,7 +61,7 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, handleDragCard, handleDragColu
       handleDragCard({ columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex });
       dragItem.current = { column, cardIndex, columnIndex };
     } else {
-      handleDragColumn({ targetColumnTitle: column.title, dragColumnTitle: dragColumn.current.column.title });
+      handleDragColumn({ targetColumnId: column.id, dragColumnId: dragColumn.current.column.id });
     }
   };
 
