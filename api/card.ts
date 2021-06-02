@@ -5,11 +5,11 @@ import fetchApi from './fetch';
 import urls from './config/urls';
 
 const CardApi = {
-  dragCard: (params: dragCardDTO): TReturn<ICardList> => {
+  dragCard: (list: ICardList): TReturn<ICardList> => {
     return fetchApi<ICardList>({
       url: urls.CARD,
       method: 'PATCH',
-      data: params,
+      data: { list },
     });
   },
 };

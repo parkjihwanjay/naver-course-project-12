@@ -102,16 +102,16 @@ export const initializeThunk = (): ThunkAction<void, IRootState, null, ActionTyp
 };
 
 export const dragColumnThunk =
-  ({ targetColumnId, dragColumnId }: dragColumnDTO): ThunkAction<void, IRootState, null, ActionType<typeof dragColumnAction>> =>
+  (list: ICardList): ThunkAction<void, IRootState, null, ActionType<typeof dragColumnAction>> =>
   async (dispatch) => {
-    const [data, error] = await ColumnApi.dragColumn({ targetColumnId, dragColumnId });
+    const [data, error] = await ColumnApi.dragColumn(list);
     dispatch(setCardListAction(data));
   };
 
 export const dragCardThunk =
-  (params: dragCardDTO): ThunkAction<void, IRootState, null, ActionType<typeof dragCardAction>> =>
+  (list: ICardList): ThunkAction<void, IRootState, null, ActionType<typeof dragCardAction>> =>
   async (dispatch) => {
-    const [data, error] = await CardApi.dragCard(params);
+    const [data, error] = await CardApi.dragCard(list);
     dispatch(setCardListAction(data));
   };
 

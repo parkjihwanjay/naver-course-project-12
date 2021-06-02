@@ -18,13 +18,12 @@ const ColumnApi = {
       },
     });
   },
-  dragColumn: ({ targetColumnId, dragColumnId }: dragColumnDTO): TReturn<ICardListModel> => {
+  dragColumn: (list: ICardList): TReturn<ICardListModel> => {
     return fetchApi({
       url: urls.COLUMN,
       method: 'PATCH',
       data: {
-        targetColumnId,
-        dragColumnId,
+        list,
       },
     });
   },

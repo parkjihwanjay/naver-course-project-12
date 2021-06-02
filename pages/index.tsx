@@ -9,9 +9,11 @@ import {
   initializeThunk,
   dragColumnThunk,
   dragCardThunk,
+  dragColumnAction,
+  dragCardAction,
 } from '@/store/modules/CardList';
 import { dragCardDTO } from '@/interfaces/api/card';
-import { dragColumnDTO } from '@/interfaces/api/column';
+import { ICardList, IDragColumnPayload } from '@/interfaces/ICardList';
 
 const Home: React.FC = () => {
   const { dispatch } = useRedux();
@@ -28,10 +30,16 @@ const Home: React.FC = () => {
     dispatch(editColumnSaveAction({ title, columnIndex, newTitle }));
   };
   const handleDragCard = (payload: dragCardDTO) => {
-    dispatch(dragCardThunk(payload));
+    dispatch(dragCardAction(payload));
   };
-  const handleDragColumn = (payload: dragColumnDTO) => {
-    dispatch(dragColumnThunk(payload));
+  const handleDropCard = (list: ICardList) => {
+    dispatch(dragCardThunk(list));
+  };
+  const handleDragColumn = (payload: IDragColumnPayload) => {
+    dispatch(dragColumnAction(payload));
+  };
+  const handleDropColumn = (list: ICardList) => {
+    dispatch(dragColumnThunk(list));
   };
 
   useEffect(() => {
@@ -48,6 +56,8 @@ const Home: React.FC = () => {
           editColumnSave={editColumnSave}
           handleDragCard={handleDragCard}
           handleDragColumn={handleDragColumn}
+          handleDropColumn={handleDropColumn}
+          handleDropCard={handleDropCard}
         />
       </header>
     </div>

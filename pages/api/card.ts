@@ -6,11 +6,9 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
   const cardList = CardListModel.readData<ICardListModel>();
   switch (req.method) {
     case 'PATCH': {
-      const { columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex } = req.body;
-      const deletedCard = cardList[dragColumnIndex].items.splice(dragItemCardIndex, 1)[0];
-      cardList[columnIndex].items.splice(cardIndex, 0, deletedCard);
-      CardListModel.writeData<ICardListModel>(cardList);
-      res.status(200).json(cardList);
+      const { list } = req.body;
+      CardListModel.writeData<ICardListModel>(list);
+      res.status(200).json(list);
       break;
     }
     default:
