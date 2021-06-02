@@ -10,6 +10,6 @@ export interface IDragCardPayload {
 }
 
 export interface IDragColumnPayload {
-  targetColumnTitle: string;
-  dragColumnTitle: string;
+  targetColumnId: string;
+  dragColumnId: string;
 }

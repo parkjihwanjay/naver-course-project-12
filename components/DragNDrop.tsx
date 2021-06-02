@@ -70,7 +70,7 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart,
       handleDragCard({ columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex });
       dragItem.current = { column, cardIndex, columnIndex };
     } else {
-      handleDragColumn({ targetColumnTitle: column.title, dragColumnTitle: dragColumn.current.column.title });
+      handleDragColumn({ targetColumnId: column.id, dragColumnId: dragColumn.current.column.id });
     }
   };
 
@@ -101,7 +101,7 @@ const DragNDrop: React.FC<IProps> = ({ addColumn, deleteColumn, editColumnStart,
     <div className="drag-n-drop">
       {list.map((column, columnIndex) => (
         <div
-          key={column.title}
+          key={column.id}
           draggable
           className="dnd-group"
           onDragEnter={(e) => handleDragEnter(e, { column, cardIndex: 0, columnIndex })}
