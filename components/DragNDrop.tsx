@@ -2,7 +2,7 @@
 import useRedux from '@/hooks/redux';
 import React, { useState, useRef, SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
-import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
+import { IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 import { TextInput } from '@/components';
 
 interface IProps {

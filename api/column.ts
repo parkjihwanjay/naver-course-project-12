@@ -1,19 +1,30 @@
-import { ColumnDTO, TReturn } from '@/interfaces/api';
-import { IColumn } from '@/interfaces/IColumn';
+import { TReturn } from '@/interfaces/api';
+import { addColumnDTO, IColumnModel, dragColumnDTO } from '@/interfaces/api/column';
 import { ICardList } from '@/interfaces/ICardList';
 import { ICard } from '@/interfaces/ICard';
-import { IColumnModel } from '@/interfaces/api/column';
+
+import { ICardListModel } from '@/interfaces/api/card-list';
 import fetchApi from './fetch';
 import urls from './config/urls';
 
 const ColumnApi = {
-  addColumn: ({ title, items }: ColumnDTO): TReturn<IColumnModel> => {
+  addColumn: ({ title, items }: addColumnDTO): TReturn<IColumnModel> => {
     return fetchApi({
       url: urls.COLUMN,
       method: 'POST',
       data: {
         title,
         items,
+      },
+    });
+  },
+  dragColumn: ({ targetColumnId, dragColumnId }: dragColumnDTO): TReturn<ICardListModel> => {
+    return fetchApi({
+      url: urls.COLUMN,
+      method: 'PATCH',
+      data: {
+        targetColumnId,
+        dragColumnId,
       },
     });
   },
