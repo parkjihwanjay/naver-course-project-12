@@ -1,0 +1,56 @@
+POST http://localhost:3000/api/column HTTP/1.1
+content-type: application/json
+
+{
+  "title" : "test-title",
+  "items" : []
+}
+
+# Response : newly created Column
+
+# {
+#   "title": "test-title",
+#   "items": [],
+#   "id": "21"
+# }
+
+###
+
+DELETE http://localhost:3000/api/column/2 HTTP/1.1
+content-type: application/json
+
+# Response : cardList of which column of id is deleted
+# [
+#   {
+#     "id": "1",
+#     "title": "group 1",
+#     "items": [
+#       "1",
+#       "2",
+#       "3"
+#     ]
+#   }
+# ]
+
+###
+
+PATCH http://localhost:3000/api/column/1 HTTP/1.1
+content-type: application/json
+
+{
+  "title" : "edit-test-title"
+}
+
+# Response : updated Column
+
+# {
+#   "id": "1",
+#   "title": "edit-test-title",
+#   "items": [
+#     "1",
+#     "2",
+#     "3"
+#   ]
+# }
+
+
