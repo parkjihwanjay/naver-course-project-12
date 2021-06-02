@@ -17,12 +17,9 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
       break;
     }
     case 'PATCH': {
-      const { targetColumnId, dragColumnId } = req.body;
-      const targetColumnIndex = cardList.findIndex((el) => el.id === targetColumnId);
-      const dragColumnIndex = cardList.findIndex((el) => el.id === dragColumnId);
-      swapItem<IColumnModel>(cardList, targetColumnIndex, dragColumnIndex);
-      CardListModel.writeData<ICardListModel>(cardList);
-      res.status(200).json(cardList);
+      const { list } = req.body;
+      CardListModel.writeData<ICardListModel>(list);
+      res.status(200).json(list);
       break;
     }
     default:
