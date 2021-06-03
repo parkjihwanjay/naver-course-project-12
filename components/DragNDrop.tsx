@@ -8,8 +8,8 @@ import { TextInput } from '@/components';
 interface IProps {
   addColumn: (title: string) => void;
   deleteColumn: (title: string) => void;
-  editColumnStart: (title: string, columnIndex: number) => void;
-  editColumnSave: (title: string, columnIndex: number, newTitle: string) => void;
+  editColumnStart: (id: string) => void;
+  editColumnSave: (id: string, newTitle: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
   handleDropColumn: (list: ICardList) => void;
@@ -45,6 +45,7 @@ const DragNDrop: React.FC<IProps> = ({
 }) => {
   const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
+  const editingColumnId = useAppSelector((state) => state.editing);
   const [dragging, setDragging] = useState(false);
 
   const dragItem = useRef<IDragParams>();
@@ -94,11 +95,11 @@ const DragNDrop: React.FC<IProps> = ({
     initialize(e);
   };
 
-  const handleEditColumnStart = ({ column, columnIndex }: IEditColumnParams): void => {
-    editColumnStart(column.title, columnIndex);
+  const handleEditColumnStart = (id: string): void => {
+    editColumnStart(id);
   };
-  const handleEditColumnSave = (newTitle: string, { column, columnIndex }: IEditColumnParams): void => {
-    editColumnSave(column.title, columnIndex, newTitle);
+  const handleEditColumnSave = (id: string, newTitle: string): void => {
+    editColumnSave(id, newTitle);
   };
   const initialize = (e: SyntheticEvent): void => {
     e.preventDefault();
@@ -131,10 +132,10 @@ const DragNDrop: React.FC<IProps> = ({
           onDrop={handleDrop}
         >
           <div>
-            {column.isEditing ? (
-              <TextInput defaultValue={column.title} handleColumnSave={(newTitle) => handleEditColumnSave(newTitle, { column, columnIndex })} />
+            {editingColumnId === column.id ? (
+              <TextInput defaultValue={column.title} handleColumnSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
             ) : (
-              <div onClick={(e) => handleEditColumnStart({ column, columnIndex })}>{column.title}</div>
+              <div onClick={(e) => handleEditColumnStart(column.id)}>{column.title}</div>
             )}
             <input type="button" value="delete" onClick={() => deleteColumn(column.title)} />
           </div>
