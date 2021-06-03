@@ -70,7 +70,7 @@ const reducers: CreateSliceOptions['reducers'] = {
     const addCardColumnTitle = action.payload.columnTitle;
     const temp = action.payload.content;
     const addCardColumnIndex = state.findIndex((el) => el.title === addCardColumnTitle);
-    state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id, isEditing: false });
+    state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id, isEditing: action.payload.isEditing });
   },
   deleteCard: (state: ICardList, action: PayloadAction<IDeleteCardPayload>) => {
     const deleteCardId = action.payload.id;
@@ -133,7 +133,6 @@ export const addColumnAction = (payload: IAddColumnPayload): Action => addColumn
 export const deleteColumnAction = (payload: IDeleteColumnPayload): Action => deleteColumn(payload);
 export const addCardAction = (payload: IAddCardPayload): Action => addCard(payload);
 export const deleteCardAction = (payload: IDeleteCardPayload): Action => deleteCard(payload);
-export const editColumnStartAction = (payload: IEditColumnStartPayload): Action => editColumnStart(payload);
 export const editColumnSaveAction = (payload: IEditColumnSavePayload): Action => editColumnSave(payload);
 export const editCardStartAction = (payload: IEditCardStartPayload): Action => editCardStart(payload);
 export const editCardSaveAction = (payload: IEditCardSavePayload): Action => editCardSave(payload);
