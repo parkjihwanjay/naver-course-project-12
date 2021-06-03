@@ -1,14 +1,14 @@
-import { ICardModel } from './card';
+import { ICardItmesModel } from './card';
 
 export interface IColumnModel {
-  id: string;
+  id?: string;
   title: string;
-  items: ICardModel;
+  items: ICardItmesModel;
 }
 
 export interface addColumnDTO {
   title: string;
-  items: ICardModel;
+  items: ICardItmesModel;
 }
 
 export interface dragColumnDTO {
