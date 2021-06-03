@@ -3,7 +3,6 @@ import CardListModel from '@/data/model/CardListModel';
 import { ICardListModel } from '@/interfaces/api/card-list';
 
 export default (req: NextApiRequest, res: NextApiResponse): void => {
-  const cardList = CardListModel.readData<ICardListModel>();
   switch (req.method) {
     case 'PATCH': {
       const { list } = req.body;

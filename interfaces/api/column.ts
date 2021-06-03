@@ -3,12 +3,12 @@ import { ICardModel } from './card';
 export interface IColumnModel {
   id: string;
   title: string;
-  items: ICardModel;
+  items: ICardModel[];
 }
 
 export interface addColumnDTO {
   title: string;
-  items: ICardModel;
+  items: ICardModel[];
 }
 
 export interface dragColumnDTO {
