@@ -1,1 +1,1 @@
-{"data":[{"title":"group-5","items":[{"id":"2","content":"5"},{"id":"1","content":"2"}],"id":"3"},{"id":"4","title":"edit-test-title","items":[{"id":"5","content":"3"}]},{"id":"31","title":"group-5","items":[],"isEditing":false},{"id":"33","title":"group-5","items":[],"isEditing":false}],"counter":47}
+{"data":[{"title":"group-5","items":[{"id":"1","content":"2"},{"id":"2","content":"5"}],"id":"3"},{"id":"4","title":"edit-test-title","items":[{"id":"5","content":"3"}]},{"id":"31","title":"group-5","items":[]},{"title":"group-5","items":[],"id":"53"}],"counter":55}
