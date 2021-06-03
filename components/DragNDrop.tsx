@@ -136,7 +136,7 @@ const DragNDrop: React.FC<IProps> = ({
         >
           <div>
             {column.isEditing ? (
-              <TextInput defaultValue={column.title} handleColumnSave={(newTitle) => handleEditColumnSave(newTitle, { column, columnIndex })} />
+              <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(newTitle, { column, columnIndex })} />
             ) : (
               <div onClick={(e) => handleEditColumnStart({ column, columnIndex })}>{column.title}</div>
             )}
