@@ -7,7 +7,7 @@ import { TextInput } from '@/components';
 
 interface IProps {
   addColumn: (title: string) => void;
-  deleteColumn: (title: string) => void;
+  deleteColumn: (id: string) => void;
   editColumnStart: (title: string, columnIndex: number) => void;
   editColumnSave: (title: string, columnIndex: number, newTitle: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
@@ -136,7 +136,7 @@ const DragNDrop: React.FC<IProps> = ({
             ) : (
               <div onClick={(e) => handleEditColumnStart({ column, columnIndex })}>{column.title}</div>
             )}
-            <input type="button" value="delete" onClick={() => deleteColumn(column.title)} />
+            <input type="button" value="delete" onClick={() => deleteColumn(column.id)} />
           </div>
           {column.items.map((card, cardIndex) => (
             <div
