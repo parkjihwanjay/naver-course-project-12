@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface IProps {
   defaultValue: string;
-  handleColumnSave: (newContent: string) => void;
+  handleItemSave: (newContent: string) => void;
 }
-const TextInput: React.FC<IProps> = ({ defaultValue, handleColumnSave }) => {
+const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
   const [value, setValue] = useState<string>(defaultValue);
   const editingInput = useRef<HTMLInputElement>();
 
@@ -12,7 +12,7 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleColumnSave }) => {
     const handleOuterClick = (e: React.MouseEvent): void => {
       const target = e.target as Element;
       if (!editingInput.current.contains(target)) {
-        return handleColumnSave(value);
+        return handleItemSave(value);
       }
     };
 
@@ -33,7 +33,7 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleColumnSave }) => {
       onChange={handleChange}
       defaultValue={defaultValue}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === 'Escape') return handleColumnSave(value);
+        if (e.key === 'Enter' || e.key === 'Escape') return handleItemSave(value);
       }}
       type="text"
     />

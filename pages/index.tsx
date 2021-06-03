@@ -3,6 +3,12 @@ import { DragNDrop } from '@/components';
 import useRedux from '@/hooks/redux';
 import {
   deleteColumnAction,
+  editColumnStartAction,
+  editColumnSaveAction,
+  addCardAction,
+  deleteCardAction,
+  editCardStartAction,
+  editCardSaveAction,
   editColumnSaveThunk,
   addColumnThunk,
   initializeThunk,
@@ -30,6 +36,18 @@ const Home: React.FC = () => {
   const editColumnSave = (id: string, newTitle: string) => {
     dispatch(editColumnSaveThunk(id, newTitle));
   };
+  const addCard = (columnTitle, content, id) => {
+    dispatch(addCardAction({ columnTitle, content, id, isEditing: true }));
+  };
+  const deleteCard = (title, id) => {
+    dispatch(deleteCardAction({ title, id }));
+  };
+  const editCardStart = (columnTitle, content, cardIndex) => {
+    dispatch(editCardStartAction({ columnTitle, content, cardIndex }));
+  };
+  const editCardSave = (columnTitle, content, cardIndex, newContent) => {
+    dispatch(editCardSaveAction({ columnTitle, content, cardIndex, newContent }));
+  };
   const handleDragCard = (payload: dragCardDTO) => {
     dispatch(dragCardAction(payload));
   };
@@ -55,6 +73,10 @@ const Home: React.FC = () => {
           deleteColumn={deleteColumn}
           editColumnStart={editColumnStart}
           editColumnSave={editColumnSave}
+          addCard={addCard}
+          deleteCard={deleteCard}
+          editCardSave={editCardSave}
+          editCardStart={editCardStart}
           handleDragCard={handleDragCard}
           handleDragColumn={handleDragColumn}
           handleDropColumn={handleDropColumn}

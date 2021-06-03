@@ -2,11 +2,16 @@
 import useRedux from '@/hooks/redux';
 import React, { useState, useRef, SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
+import { ICard } from '@/interfaces/ICard';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 import { TextInput } from '@/components';
 
 interface IProps {
   addColumn: (title: string) => void;
+  addCard: (columnTitle: string, content: string, id: string) => void;
+  deleteCard: (title: string, id: string) => void;
+  editCardStart: (columnTitle: string, content: string, cardIndex: number) => void;
+  editCardSave: (columnTitle: string, content: string, cardIndex: number, newContent: string) => void;
   editColumnStart: (id: string) => void;
   editColumnSave: (id: string, newTitle: string) => void;
   deleteColumn: (id: string) => void;
@@ -27,6 +32,12 @@ interface IEditColumnParams {
   columnIndex: number;
 }
 
+interface IEditCardParams {
+  column: IColumn;
+  card: ICard;
+  cardIndex: number;
+}
+
 type ReactDragEvent = React.DragEvent<HTMLElement>;
 
 const preventEvent = (e: SyntheticEvent) => {
@@ -38,6 +49,10 @@ const DragNDrop: React.FC<IProps> = ({
   deleteColumn,
   editColumnStart,
   editColumnSave,
+  addCard,
+  deleteCard,
+  editCardStart,
+  editCardSave,
   handleDragCard,
   handleDragColumn,
   handleDropColumn,
@@ -101,6 +116,12 @@ const DragNDrop: React.FC<IProps> = ({
   const handleEditColumnSave = (id: string, newTitle: string): void => {
     editColumnSave(id, newTitle);
   };
+  const handleEditCardStart = ({ column, card, cardIndex }: IEditCardParams): void => {
+    editCardStart(column.title, card.content, cardIndex);
+  };
+  const handleEditCardSave = (newContent: string, { column, card, cardIndex }: IEditCardParams): void => {
+    editCardSave(column.title, card.content, cardIndex, newContent);
+  };
   const initialize = (e: SyntheticEvent): void => {
     e.preventDefault();
     e.stopPropagation();
@@ -133,7 +154,7 @@ const DragNDrop: React.FC<IProps> = ({
         >
           <div>
             {editingColumnId === column.id ? (
-              <TextInput defaultValue={column.title} handleColumnSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
+              <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
             ) : (
               <div onClick={(e) => handleEditColumnStart(column.id)}>{column.title}</div>
             )}
@@ -151,9 +172,23 @@ const DragNDrop: React.FC<IProps> = ({
               onDragEnd={initialize}
               onDrop={(e) => handleCardDrop(e)}
             >
-              {card.content}
+              <div>
+                {card.isEditing ? (
+                  <TextInput
+                    defaultValue={card.content}
+                    handleItemSave={(newContent) => handleEditCardSave(newContent, { column, card, cardIndex })}
+                  />
+                ) : (
+                  <div onClick={(e) => handleEditCardStart({ column, card, cardIndex })}>{card.content}</div>
+                )}
+
+                <button type="button" value="carddel" onClick={() => deleteCard(column.title, card.id)}>
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
+          <input type="button" value="cardadd" onClick={() => addCard(column.title, 'new', '6')} />
         </div>
       ))}
       <input type="button" value="plus" onClick={() => addColumn('group-5')} />
