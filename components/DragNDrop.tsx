@@ -2,6 +2,7 @@
 import useRedux from '@/hooks/redux';
 import React, { useState, useRef, SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
+import { ICard } from '@/interfaces/ICard';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 import { TextInput } from '@/components';
 
@@ -12,6 +13,8 @@ interface IProps {
   editColumnSave: (title: string, columnIndex: number, newTitle: string) => void;
   addCard: (columnTitle: string, content: string, id: string) => void;
   deleteCard: (title: string, id: string) => void;
+  editCardStart: (columnTitle: string, content: string, cardIndex: number) => void;
+  editCardSave: (columnTitle: string, content: string, cardIndex: number, newContent: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
   handleDropColumn: (list: ICardList) => void;
@@ -29,6 +32,12 @@ interface IEditColumnParams {
   columnIndex: number;
 }
 
+interface IEditCardParams {
+  column: IColumn;
+  card: ICard;
+  cardIndex: number;
+}
+
 type ReactDragEvent = React.DragEvent<HTMLElement>;
 
 const preventEvent = (e: SyntheticEvent) => {
@@ -42,6 +51,8 @@ const DragNDrop: React.FC<IProps> = ({
   editColumnSave,
   addCard,
   deleteCard,
+  editCardStart,
+  editCardSave,
   handleDragCard,
   handleDragColumn,
   handleDropColumn,
@@ -104,6 +115,12 @@ const DragNDrop: React.FC<IProps> = ({
   const handleEditColumnSave = (newTitle: string, { column, columnIndex }: IEditColumnParams): void => {
     editColumnSave(column.title, columnIndex, newTitle);
   };
+  const handleEditCardStart = ({ column, card, cardIndex }: IEditCardParams): void => {
+    editCardStart(column.title, card.content, cardIndex);
+  };
+  const handleEditCardSave = (newContent: string, { column, card, cardIndex }: IEditCardParams): void => {
+    editCardSave(column.title, card.content, cardIndex, newContent);
+  };
   const initialize = (e: SyntheticEvent): void => {
     e.preventDefault();
     e.stopPropagation();
@@ -154,10 +171,20 @@ const DragNDrop: React.FC<IProps> = ({
               onDragEnd={initialize}
               onDrop={(e) => handleCardDrop(e)}
             >
-              {card.content}
-              <button type="button" value="carddel" onClick={() => deleteCard(column.title, card.id)}>
-                Delete
-              </button>
+              <div>
+                {card.isEditing ? (
+                  <TextInput
+                    defaultValue={card.content}
+                    handleItemSave={(newContent) => handleEditCardSave(newContent, { column, card, cardIndex })}
+                  />
+                ) : (
+                  <div onClick={(e) => handleEditCardStart({ column, card, cardIndex })}>{card.content}</div>
+                )}
+
+                <button type="button" value="carddel" onClick={() => deleteCard(column.title, card.id)}>
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
           <input type="button" value="cardadd" onClick={() => addCard(column.title, 'new', '6')} />

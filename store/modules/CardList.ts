@@ -17,6 +17,7 @@ interface IAddColumnPayload {
   title: string;
   items: ICard;
   id: string;
+  isEditing: boolean;
 }
 interface IDeleteColumnPayload {
   title: string;
@@ -39,6 +40,17 @@ interface IAddCardPayload {
 interface IDeleteCardPayload {
   title: string;
   id: string;
+}
+interface IEditCardStartPayload {
+  columnTitle: string;
+  content: string;
+  cardIndex: number;
+}
+interface IEditCardSavePayload {
+  columnTitle: string;
+  content: string;
+  cardIndex: number;
+  newContent: string;
 }
 const reducers: CreateSliceOptions['reducers'] = {
   initialize: (state: ICardList, action: PayloadAction<ICardListModel>) => {
@@ -71,7 +83,7 @@ const reducers: CreateSliceOptions['reducers'] = {
     const addCardColumnTitle = action.payload.columnTitle;
     const temp = action.payload.content;
     const addCardColumnIndex = state.findIndex((el) => el.title === addCardColumnTitle);
-    state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id });
+    state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id, isEditing: action.payload.isEditing });
   },
   deleteCard: (state: ICardList, action: PayloadAction<IDeleteCardPayload>) => {
     const deleteCardId = action.payload.id;
@@ -79,6 +91,20 @@ const reducers: CreateSliceOptions['reducers'] = {
     const deleteCardColumnIndex = state.findIndex((el) => el.title === deleteCardColumnTitle);
     const deleteCardIndex = state[deleteCardColumnIndex].items.findIndex((el) => el.id === deleteCardId);
     state[deleteCardColumnIndex].items.splice(deleteCardIndex, 1);
+  },
+  editCardStart: (state: ICardList, action: PayloadAction<IEditCardStartPayload>) => {
+    // columnindex에서 cardindex를 꺼낸다. 그리고 edit
+    const { columnTitle, content, cardIndex } = action.payload;
+    const editCardColumnIndex = state.findIndex((el) => el.title === columnTitle);
+    const editCardIndex = state[editCardColumnIndex].items.findIndex((el, index) => el.content === content && index === cardIndex);
+    state[editCardColumnIndex].items[editCardIndex].isEditing = true;
+  },
+  editCardSave: (state: ICardList, action: PayloadAction<IEditCardSavePayload>) => {
+    const { columnTitle, content, cardIndex, newContent } = action.payload;
+    const editCardColumnIndex = state.findIndex((el) => el.title === columnTitle);
+    const editCardIndex = state[editCardColumnIndex].items.findIndex((el, index) => el.content === content && index === cardIndex);
+    state[editCardColumnIndex].items[editCardIndex].content = newContent;
+    state[editCardColumnIndex].items[editCardIndex].isEditing = false;
   },
   dragCard: (state: ICardList, action: PayloadAction<IDragCardPayload>) => {
     const { columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex } = action.payload;
@@ -99,8 +125,20 @@ const cardListSlice = createSlice({
   reducers,
 });
 
-const { addColumn, deleteColumn, editColumnStart, editColumnSave, addCard, deleteCard, dragColumn, dragCard, initialize, setCardList } =
-  cardListSlice.actions;
+const {
+  addColumn,
+  deleteColumn,
+  editColumnStart,
+  editColumnSave,
+  addCard,
+  deleteCard,
+  editCardStart,
+  editCardSave,
+  dragColumn,
+  dragCard,
+  initialize,
+  setCardList,
+} = cardListSlice.actions;
 
 export const initializeAction = (payload: ICardListModel): Action => initialize(payload);
 export const setCardListAction = (payload: ICardListModel): Action => setCardList(payload);
@@ -110,6 +148,8 @@ export const addCardAction = (payload: IAddCardPayload): Action => addCard(paylo
 export const deleteCardAction = (payload: IDeleteCardPayload): Action => deleteCard(payload);
 export const editColumnStartAction = (payload: IEditColumnStartPayload): Action => editColumnStart(payload);
 export const editColumnSaveAction = (payload: IEditColumnSavePayload): Action => editColumnSave(payload);
+export const editCardStartAction = (payload: IEditCardStartPayload): Action => editCardStart(payload);
+export const editCardSaveAction = (payload: IEditCardSavePayload): Action => editCardSave(payload);
 export const dragCardAction = (payload: IDragCardPayload): Action => dragCard(payload);
 export const dragColumnAction = (payload: IDragColumnPayload): Action => dragColumn(payload);
 
