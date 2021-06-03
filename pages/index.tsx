@@ -5,6 +5,8 @@ import {
   deleteColumnAction,
   editColumnStartAction,
   editColumnSaveAction,
+  addCardAction,
+  deleteCardAction,
   addColumnThunk,
   initializeThunk,
   dragColumnThunk,
@@ -28,6 +30,12 @@ const Home: React.FC = () => {
   };
   const editColumnSave = (title, columnIndex, newTitle) => {
     dispatch(editColumnSaveAction({ title, columnIndex, newTitle }));
+  };
+  const addCard = (columnTitle, content, id) => {
+    dispatch(addCardAction({ columnTitle, content, id }));
+  };
+  const deleteCard = (title, id) => {
+    dispatch(deleteCardAction({ title, id }));
   };
   const handleDragCard = (payload: dragCardDTO) => {
     dispatch(dragCardAction(payload));
@@ -54,6 +62,8 @@ const Home: React.FC = () => {
           deleteColumn={deleteColumn}
           editColumnStart={editColumnStart}
           editColumnSave={editColumnSave}
+          addCard={addCard}
+          deleteCard={deleteCard}
           handleDragCard={handleDragCard}
           handleDragColumn={handleDragColumn}
           handleDropColumn={handleDropColumn}

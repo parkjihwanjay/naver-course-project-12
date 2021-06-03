@@ -10,6 +10,8 @@ interface IProps {
   deleteColumn: (title: string) => void;
   editColumnStart: (title: string, columnIndex: number) => void;
   editColumnSave: (title: string, columnIndex: number, newTitle: string) => void;
+  addCard: (columnTitle: string, content: string, id: string) => void;
+  deleteCard: (title: string, id: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
   handleDropColumn: (list: ICardList) => void;
@@ -38,6 +40,8 @@ const DragNDrop: React.FC<IProps> = ({
   deleteColumn,
   editColumnStart,
   editColumnSave,
+  addCard,
+  deleteCard,
   handleDragCard,
   handleDragColumn,
   handleDropColumn,
@@ -151,8 +155,12 @@ const DragNDrop: React.FC<IProps> = ({
               onDrop={(e) => handleCardDrop(e)}
             >
               {card.content}
+              <button type="button" value="carddel" onClick={() => deleteCard(column.title, card.id)}>
+                Delete
+              </button>
             </div>
           ))}
+          <input type="button" value="cardadd" onClick={() => addCard(column.title, 'new', '6')} />
         </div>
       ))}
       <input type="button" value="plus" onClick={() => addColumn('group-5')} />

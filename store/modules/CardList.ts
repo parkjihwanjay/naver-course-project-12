@@ -31,7 +31,15 @@ interface IEditColumnSavePayload {
   columnIndex: number;
   newTitle: string;
 }
-
+interface IAddCardPayload {
+  columnTitle: string;
+  content: string;
+  id: string;
+}
+interface IDeleteCardPayload {
+  title: string;
+  id: string;
+}
 const reducers: CreateSliceOptions['reducers'] = {
   initialize: (state: ICardList, action: PayloadAction<ICardListModel>) => {
     return action.payload;
@@ -59,6 +67,19 @@ const reducers: CreateSliceOptions['reducers'] = {
     state[columnIndexToEdit].title = newTitle;
     state[columnIndexToEdit].isEditing = false;
   },
+  addCard: (state: ICardList, action: PayloadAction<IAddCardPayload>) => {
+    const addCardColumnTitle = action.payload.columnTitle;
+    const temp = action.payload.content;
+    const addCardColumnIndex = state.findIndex((el) => el.title === addCardColumnTitle);
+    state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id });
+  },
+  deleteCard: (state: ICardList, action: PayloadAction<IDeleteCardPayload>) => {
+    const deleteCardId = action.payload.id;
+    const deleteCardColumnTitle = action.payload.title;
+    const deleteCardColumnIndex = state.findIndex((el) => el.title === deleteCardColumnTitle);
+    const deleteCardIndex = state[deleteCardColumnIndex].items.findIndex((el) => el.id === deleteCardId);
+    state[deleteCardColumnIndex].items.splice(deleteCardIndex, 1);
+  },
   dragCard: (state: ICardList, action: PayloadAction<IDragCardPayload>) => {
     const { columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex } = action.payload;
     const deletedCard = state[dragColumnIndex].items.splice(dragItemCardIndex, 1)[0];
@@ -78,12 +99,15 @@ const cardListSlice = createSlice({
   reducers,
 });
 
-const { addColumn, deleteColumn, editColumnStart, editColumnSave, dragColumn, dragCard, initialize, setCardList } = cardListSlice.actions;
+const { addColumn, deleteColumn, editColumnStart, editColumnSave, addCard, deleteCard, dragColumn, dragCard, initialize, setCardList } =
+  cardListSlice.actions;
 
 export const initializeAction = (payload: ICardListModel): Action => initialize(payload);
 export const setCardListAction = (payload: ICardListModel): Action => setCardList(payload);
 export const addColumnAction = (payload: IAddColumnPayload): Action => addColumn(payload);
 export const deleteColumnAction = (payload: IDeleteColumnPayload): Action => deleteColumn(payload);
+export const addCardAction = (payload: IAddCardPayload): Action => addCard(payload);
+export const deleteCardAction = (payload: IDeleteCardPayload): Action => deleteCard(payload);
 export const editColumnStartAction = (payload: IEditColumnStartPayload): Action => editColumnStart(payload);
 export const editColumnSaveAction = (payload: IEditColumnSavePayload): Action => editColumnSave(payload);
 export const dragCardAction = (payload: IDragCardPayload): Action => dragCard(payload);
