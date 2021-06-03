@@ -9,8 +9,9 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
   switch (req.method) {
     case 'DELETE': {
       const index = cardList.findIndex((el) => el.id === id);
-      cardList.splice(index, 1);
-      res.status(200).json(cardList);
+      const deletedColumn = cardList.splice(index, 1);
+      CardListModel.writeData(cardList);
+      res.status(200).json(deletedColumn);
       break;
     }
     case 'PATCH': {
