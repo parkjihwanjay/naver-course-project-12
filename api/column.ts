@@ -27,7 +27,7 @@ const ColumnApi = {
       },
     });
   },
-  deleteColumn: (id: string): TReturn<ICardList> => {
+  deleteColumn: (id: string): TReturn<IColumnModel> => {
     return fetchApi({
       url: `${urls.COLUMN}/${id}`,
       method: 'DELETE',

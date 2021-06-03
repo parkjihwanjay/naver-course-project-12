@@ -9,29 +9,32 @@ import {
   deleteCardAction,
   editCardStartAction,
   editCardSaveAction,
+  editColumnSaveThunk,
   addColumnThunk,
   initializeThunk,
   dragColumnThunk,
   dragCardThunk,
   dragColumnAction,
   dragCardAction,
+  deleteColumnThunk,
 } from '@/store/modules/CardList';
 import { dragCardDTO } from '@/interfaces/api/card';
 import { ICardList, IDragColumnPayload } from '@/interfaces/ICardList';
+import { setEditingStateAction } from '@/store/modules/Editing';
 
 const Home: React.FC = () => {
   const { dispatch } = useRedux();
   const addColumn = (title = '') => {
     dispatch(addColumnThunk(title, []));
   };
-  const deleteColumn = (title) => {
-    dispatch(deleteColumnAction({ title }));
+  const deleteColumn = (id: string) => {
+    dispatch(deleteColumnThunk(id));
   };
-  const editColumnStart = (title, columnIndex) => {
-    dispatch(editColumnStartAction({ title, columnIndex }));
+  const editColumnStart = (id: string) => {
+    dispatch(setEditingStateAction(id));
   };
-  const editColumnSave = (title, columnIndex, newTitle) => {
-    dispatch(editColumnSaveAction({ title, columnIndex, newTitle }));
+  const editColumnSave = (id: string, newTitle: string) => {
+    dispatch(editColumnSaveThunk(id, newTitle));
   };
   const addCard = (columnTitle, content, id) => {
     dispatch(addCardAction({ columnTitle, content, id, isEditing: true }));

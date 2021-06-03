@@ -8,13 +8,13 @@ import { TextInput } from '@/components';
 
 interface IProps {
   addColumn: (title: string) => void;
-  deleteColumn: (title: string) => void;
-  editColumnStart: (title: string, columnIndex: number) => void;
-  editColumnSave: (title: string, columnIndex: number, newTitle: string) => void;
   addCard: (columnTitle: string, content: string, id: string) => void;
   deleteCard: (title: string, id: string) => void;
   editCardStart: (columnTitle: string, content: string, cardIndex: number) => void;
   editCardSave: (columnTitle: string, content: string, cardIndex: number, newContent: string) => void;
+  editColumnStart: (id: string) => void;
+  editColumnSave: (id: string, newTitle: string) => void;
+  deleteColumn: (id: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
   handleDropColumn: (list: ICardList) => void;
@@ -60,6 +60,7 @@ const DragNDrop: React.FC<IProps> = ({
 }) => {
   const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
+  const editingColumnId = useAppSelector((state) => state.editing);
   const [dragging, setDragging] = useState(false);
 
   const dragItem = useRef<IDragParams>();
@@ -109,11 +110,11 @@ const DragNDrop: React.FC<IProps> = ({
     initialize(e);
   };
 
-  const handleEditColumnStart = ({ column, columnIndex }: IEditColumnParams): void => {
-    editColumnStart(column.title, columnIndex);
+  const handleEditColumnStart = (id: string): void => {
+    editColumnStart(id);
   };
-  const handleEditColumnSave = (newTitle: string, { column, columnIndex }: IEditColumnParams): void => {
-    editColumnSave(column.title, columnIndex, newTitle);
+  const handleEditColumnSave = (id: string, newTitle: string): void => {
+    editColumnSave(id, newTitle);
   };
   const handleEditCardStart = ({ column, card, cardIndex }: IEditCardParams): void => {
     editCardStart(column.title, card.content, cardIndex);
@@ -152,12 +153,12 @@ const DragNDrop: React.FC<IProps> = ({
           onDrop={handleDrop}
         >
           <div>
-            {column.isEditing ? (
-              <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(newTitle, { column, columnIndex })} />
+            {editingColumnId === column.id ? (
+              <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
             ) : (
-              <div onClick={(e) => handleEditColumnStart({ column, columnIndex })}>{column.title}</div>
+              <div onClick={(e) => handleEditColumnStart(column.id)}>{column.title}</div>
             )}
-            <input type="button" value="delete" onClick={() => deleteColumn(column.title)} />
+            <input type="button" value="delete" onClick={() => deleteColumn(column.id)} />
           </div>
           {column.items.map((card, cardIndex) => (
             <div
