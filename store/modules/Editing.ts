@@ -5,7 +5,6 @@ type IEditingState = string | null;
 
 const reducers: CreateSliceOptions['reducers'] = {
   setEditingState: (state: IEditingState, action: PayloadAction<string>) => {
-    console.log(action.payload);
     return action.payload;
   },
 };
