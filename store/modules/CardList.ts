@@ -2,12 +2,10 @@
 import CardListApi from '@/api/card-list';
 import ColumnApi from '@/api/column';
 import CardApi from '@/api/card';
-import { ICard } from '@/interfaces/ICard';
 import { IColumn } from '@/interfaces/IColumn';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
-import { dragColumnDTO } from '@/interfaces/api/column';
 import { ICardListModel } from '@/interfaces/api/card-list';
-import { dragCardDTO } from '@/interfaces/api/card';
+import { ICardItmesModel } from '@/interfaces/api/card';
 import { swapItem } from '@/utils';
 import { Action, createSlice, CreateSliceOptions, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
 import { ActionType } from 'typesafe-actions';
@@ -15,11 +13,11 @@ import { IRootState } from './RootState';
 
 interface IAddColumnPayload {
   title: string;
-  items: ICard;
+  items: ICardItmesModel;
   id: string;
 }
 interface IDeleteColumnPayload {
-  title: string;
+  id: string;
 }
 
 interface IEditColumnStartPayload {
@@ -44,8 +42,8 @@ const reducers: CreateSliceOptions['reducers'] = {
     state.push({ id, title, items, isEditing: false });
   },
   deleteColumn: (state: ICardList, action: PayloadAction<IDeleteColumnPayload>) => {
-    const deleteColumnTitle = action.payload.title;
-    const deleteColumnIndex = state.findIndex((el) => el.title === deleteColumnTitle);
+    const deleteColumnId = action.payload.id;
+    const deleteColumnIndex = state.findIndex((el) => el.id === deleteColumnId);
     state.splice(deleteColumnIndex, 1);
   },
   editColumnStart: (state: ICardList, action: PayloadAction<IEditColumnStartPayload>) => {
@@ -90,7 +88,7 @@ export const dragCardAction = (payload: IDragCardPayload): Action => dragCard(pa
 export const dragColumnAction = (payload: IDragColumnPayload): Action => dragColumn(payload);
 
 export const addColumnThunk =
-  (title: string, items: ICard): ThunkAction<void, IRootState, null, ActionType<typeof addColumnAction>> =>
+  (title: string, items: ICardItmesModel): ThunkAction<void, IRootState, null, ActionType<typeof addColumnAction>> =>
   async (dispatch) => {
     const [data, error] = await ColumnApi.addColumn({ title, items });
     dispatch(addColumnAction(data));
@@ -113,6 +111,13 @@ export const dragCardThunk =
   async (dispatch) => {
     const [data, error] = await CardApi.dragCard(list);
     dispatch(setCardListAction(data));
+  };
+
+export const deleteColumnThunk =
+  (id: string): ThunkAction<void, IRootState, null, ActionType<typeof deleteColumnAction>> =>
+  async (dispatch) => {
+    const [data, error] = await ColumnApi.deleteColumn(id);
+    dispatch(deleteColumnAction({ id: data.id }));
   };
 
 export default cardListSlice.reducer;

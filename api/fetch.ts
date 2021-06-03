@@ -1,7 +1,7 @@
 import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import { TResult, TError } from '@/interfaces/api';
 
-const defaultUrl = process.env.NEXT_PUBLIC_SEVER_ADDRESS;
+const defaultUrl = process.env.NEXT_PUBLIC_SEVER_ADDRESS || '/api';
 axios.defaults.baseURL = defaultUrl;
 
 const makeRequest = <T>(config: AxiosRequestConfig): AxiosPromise<T> => {

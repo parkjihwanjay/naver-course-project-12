@@ -11,6 +11,7 @@ import {
   dragCardThunk,
   dragColumnAction,
   dragCardAction,
+  deleteColumnThunk,
 } from '@/store/modules/CardList';
 import { dragCardDTO } from '@/interfaces/api/card';
 import { ICardList, IDragColumnPayload } from '@/interfaces/ICardList';
@@ -20,8 +21,8 @@ const Home: React.FC = () => {
   const addColumn = (title = '') => {
     dispatch(addColumnThunk(title, []));
   };
-  const deleteColumn = (title) => {
-    dispatch(deleteColumnAction({ title }));
+  const deleteColumn = (id: string) => {
+    dispatch(deleteColumnThunk(id));
   };
   const editColumnStart = (title, columnIndex) => {
     dispatch(editColumnStartAction({ title, columnIndex }));
