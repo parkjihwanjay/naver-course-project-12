@@ -29,7 +29,7 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
     setValue(currentValue);
   };
 
-  const stopPropagation = (e: React.SyntheticEvent): void => {
+  const preventAndStopEvent = (e: React.SyntheticEvent): void => {
     e.preventDefault();
     e.stopPropagation();
   };
@@ -42,12 +42,12 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === 'Escape') return handleItemSave(value);
       }}
-      onDrag={stopPropagation}
-      onDragEnter={stopPropagation}
-      onDragStart={stopPropagation}
-      onDragOver={stopPropagation}
-      onDragEnd={stopPropagation}
-      onDrop={stopPropagation}
+      onDrag={preventAndStopEvent}
+      onDragEnter={preventAndStopEvent}
+      onDragStart={preventAndStopEvent}
+      onDragOver={preventAndStopEvent}
+      onDragEnd={preventAndStopEvent}
+      onDrop={preventAndStopEvent}
       draggable="true"
       type="text"
     />
