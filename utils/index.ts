@@ -1,2 +1,2 @@
 // utils init
-export { deleteById, swapItem } from './handleArray';
+export { deleteById, swapItem, findById } from './handleArray';

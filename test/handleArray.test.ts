@@ -1,4 +1,4 @@
-import { deleteById, swapItem } from '../utils';
+import { deleteById, swapItem, findById } from '../utils';
 import { IColumn } from '../interfaces/IColumn';
 
 const initialData = [
@@ -57,11 +57,28 @@ const afterSwap = [
 ];
 
 test('swap 0 index and 1 index in CardList', () => {
-  const swapped = swapItem<IColumn>(initialData, 0, 1);
-  expect(swapped).toStrictEqual(afterSwap);
+  const testData = [...initialData];
+  swapItem<IColumn>(testData, 0, 1);
+  expect(testData).toStrictEqual(afterSwap);
 });
 
 test('delete array item that has id 2', () => {
-  const deleted = deleteById(initialData, '2');
-  expect(deleted).toStrictEqual(afterDelete);
+  const testData = [...initialData];
+  deleteById(testData, '2');
+  expect(testData).toStrictEqual(afterDelete);
+});
+
+test('find element that has id 2 in array', () => {
+  const testData = [...initialData];
+  const { item, index } = findById(testData, '1');
+  expect(index).toBe(0);
+  expect(item).toStrictEqual({
+    title: 'group 1',
+    items: [
+      { id: '4', content: '2' },
+      { id: '5', content: '2' },
+      { id: '6', content: '2' },
+    ],
+    id: '1',
+  });
 });
