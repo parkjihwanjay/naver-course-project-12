@@ -10,6 +10,7 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
 
   useEffect(() => {
     document.addEventListener('mousedown', handleOuterClick);
+    editingInput.current.focus();
     return () => {
       document.removeEventListener('mousedown', handleOuterClick);
     };
@@ -27,6 +28,12 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
     const currentValue = inputElement.value;
     setValue(currentValue);
   };
+
+  const stopPropagation = (e: React.SyntheticEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   return (
     <input
       ref={editingInput}
@@ -35,6 +42,13 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === 'Escape') return handleItemSave(value);
       }}
+      onDrag={stopPropagation}
+      onDragEnter={stopPropagation}
+      onDragStart={stopPropagation}
+      onDragOver={stopPropagation}
+      onDragEnd={stopPropagation}
+      onDrop={stopPropagation}
+      draggable="true"
       type="text"
     />
   );
