@@ -9,18 +9,18 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
   const editingInput = useRef<HTMLInputElement>();
 
   useEffect(() => {
-    const handleOuterClick = (e: React.MouseEvent): void => {
-      const target = e.target as Element;
-      if (!editingInput.current.contains(target)) {
-        return handleItemSave(value);
-      }
-    };
-
     document.addEventListener('mousedown', handleOuterClick);
     return () => {
       document.removeEventListener('mousedown', handleOuterClick);
     };
   }, [value]);
+
+  const handleOuterClick = (e: React.MouseEvent): void => {
+    const target = e.target as Element;
+    if (!editingInput.current.contains(target)) {
+      return handleItemSave(value);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent): void => {
     const inputElement = e.target as HTMLInputElement;
