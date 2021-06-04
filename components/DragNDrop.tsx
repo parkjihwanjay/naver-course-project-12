@@ -10,8 +10,8 @@ interface IProps {
   addColumn: (title: string) => void;
   addCard: (columnTitle: string, content: string, id: string) => void;
   deleteCard: (title: string, id: string) => void;
-  editCardStart: (columnTitle: string, content: string, cardIndex: number) => void;
-  editCardSave: (columnTitle: string, content: string, cardIndex: number, newContent: string) => void;
+  editCardStart: (id: string) => void;
+  editCardSave: (columnId: string, cardId: string, content: string) => void;
   editColumnStart: (id: string) => void;
   editColumnSave: (id: string, newTitle: string) => void;
   deleteColumn: (id: string) => void;
@@ -60,7 +60,7 @@ const DragNDrop: React.FC<IProps> = ({
 }) => {
   const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
-  const editingColumnId = useAppSelector((state) => state.editing);
+  const editing = useAppSelector((state) => state.editing);
   const [dragging, setDragging] = useState(false);
 
   const dragItem = useRef<IDragParams>();
@@ -116,11 +116,11 @@ const DragNDrop: React.FC<IProps> = ({
   const handleEditColumnSave = (id: string, newTitle: string): void => {
     editColumnSave(id, newTitle);
   };
-  const handleEditCardStart = ({ column, card, cardIndex }: IEditCardParams): void => {
-    editCardStart(column.title, card.content, cardIndex);
+  const handleEditCardStart = (id: string): void => {
+    editCardStart(id);
   };
-  const handleEditCardSave = (newContent: string, { column, card, cardIndex }: IEditCardParams): void => {
-    editCardSave(column.title, card.content, cardIndex, newContent);
+  const handleEditCardSave = (columnId: string, cardId: string, content: string): void => {
+    editCardSave(columnId, cardId, content);
   };
   const initialize = (e: SyntheticEvent): void => {
     e.preventDefault();
@@ -153,7 +153,7 @@ const DragNDrop: React.FC<IProps> = ({
           onDrop={handleDrop}
         >
           <div>
-            {editingColumnId === column.id ? (
+            {editing.columnId === column.id ? (
               <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
             ) : (
               <div onClick={(e) => handleEditColumnStart(column.id)}>{column.title}</div>
@@ -173,13 +173,10 @@ const DragNDrop: React.FC<IProps> = ({
               onDrop={(e) => handleCardDrop(e)}
             >
               <div>
-                {card.isEditing ? (
-                  <TextInput
-                    defaultValue={card.content}
-                    handleItemSave={(newContent) => handleEditCardSave(newContent, { column, card, cardIndex })}
-                  />
+                {editing.cardId === card.id ? (
+                  <TextInput defaultValue={card.content} handleItemSave={(newContent) => handleEditCardSave(column.id, card.id, newContent)} />
                 ) : (
-                  <div onClick={(e) => handleEditCardStart({ column, card, cardIndex })}>{card.content}</div>
+                  <div onClick={(e) => handleEditCardStart(card.id)}>{card.content}</div>
                 )}
 
                 <button type="button" value="carddel" onClick={() => deleteCard(column.title, card.id)}>

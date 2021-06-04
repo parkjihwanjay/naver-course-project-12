@@ -12,7 +12,7 @@ import { ActionType } from 'typesafe-actions';
 import { deleteById, findById } from '@/utils/handleArray';
 import { ICard } from '@/interfaces/ICard';
 import { IRootState } from './RootState';
-import { setEditingStateAction } from './Editing';
+import { setColumnEditingStateAction, setCardEditingStateAction } from './Editing';
 
 interface IAddColumnPayload {
   title: string;
@@ -36,16 +36,10 @@ interface IDeleteCardPayload {
   title: string;
   id: string;
 }
-interface IEditCardStartPayload {
-  columnTitle: string;
-  content: string;
-  cardIndex: number;
-}
 interface IEditCardSavePayload {
-  columnTitle: string;
+  columnId: string;
   content: string;
-  cardIndex: number;
-  newContent: string;
+  cardId: string;
 }
 const reducers: CreateSliceOptions['reducers'] = {
   initialize: (state: ICardList, action: PayloadAction<ICardListModel>) => {
@@ -78,19 +72,11 @@ const reducers: CreateSliceOptions['reducers'] = {
     const deleteCardColumnIndex = state.findIndex((el) => el.title === title);
     deleteById<ICard>(state[deleteCardColumnIndex].items, id);
   },
-  editCardStart: (state: ICardList, action: PayloadAction<IEditCardStartPayload>) => {
-    // columnindex에서 cardindex를 꺼낸다. 그리고 edit
-    const { columnTitle, content, cardIndex } = action.payload;
-    const editCardColumnIndex = state.findIndex((el) => el.title === columnTitle);
-    const editCardIndex = state[editCardColumnIndex].items.findIndex((el, index) => el.content === content && index === cardIndex);
-    state[editCardColumnIndex].items[editCardIndex].isEditing = true;
-  },
   editCardSave: (state: ICardList, action: PayloadAction<IEditCardSavePayload>) => {
-    const { columnTitle, content, cardIndex, newContent } = action.payload;
-    const editCardColumnIndex = state.findIndex((el) => el.title === columnTitle);
-    const editCardIndex = state[editCardColumnIndex].items.findIndex((el, index) => el.content === content && index === cardIndex);
-    state[editCardColumnIndex].items[editCardIndex].content = newContent;
-    state[editCardColumnIndex].items[editCardIndex].isEditing = false;
+    const { cardId, columnId, content } = action.payload;
+    const editColumn = findById<IColumn>(state, columnId).item;
+    const editCard = findById<ICard>(editColumn.items, cardId).item;
+    editCard.content = content;
   },
   dragCard: (state: ICardList, action: PayloadAction<IDragCardPayload>) => {
     const { columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex } = action.payload;
@@ -111,20 +97,8 @@ const cardListSlice = createSlice({
   reducers,
 });
 
-const {
-  addColumn,
-  deleteColumn,
-  editColumnStart,
-  editColumnSave,
-  addCard,
-  deleteCard,
-  editCardStart,
-  editCardSave,
-  dragColumn,
-  dragCard,
-  initialize,
-  setCardList,
-} = cardListSlice.actions;
+const { addColumn, deleteColumn, editColumnSave, addCard, deleteCard, editCardSave, dragColumn, dragCard, initialize, setCardList } =
+  cardListSlice.actions;
 
 export const initializeAction = (payload: ICardListModel): Action => initialize(payload);
 export const setCardListAction = (payload: ICardListModel): Action => setCardList(payload);
@@ -133,7 +107,6 @@ export const deleteColumnAction = (payload: IDeleteColumnPayload): Action => del
 export const addCardAction = (payload: IAddCardPayload): Action => addCard(payload);
 export const deleteCardAction = (payload: IDeleteCardPayload): Action => deleteCard(payload);
 export const editColumnSaveAction = (payload: IEditColumnSavePayload): Action => editColumnSave(payload);
-export const editCardStartAction = (payload: IEditCardStartPayload): Action => editCardStart(payload);
 export const editCardSaveAction = (payload: IEditCardSavePayload): Action => editCardSave(payload);
 export const dragCardAction = (payload: IDragCardPayload): Action => dragCard(payload);
 export const dragColumnAction = (payload: IDragColumnPayload): Action => dragColumn(payload);
@@ -166,13 +139,20 @@ export const dragCardThunk =
 
 export const editColumnSaveThunk = (id: string, newTitle: string) => (dispatch) => {
   dispatch(editColumnSaveAction({ id, newTitle }));
-  dispatch(setEditingStateAction(null));
+  dispatch(setColumnEditingStateAction(null));
 };
 export const deleteColumnThunk =
   (id: string): ThunkAction<void, IRootState, null, ActionType<typeof deleteColumnAction>> =>
   async (dispatch) => {
     const [data, error] = await ColumnApi.deleteColumn(id);
     dispatch(deleteColumnAction({ id: data.id }));
+  };
+
+export const editCardSaveThunk =
+  ({ cardId, content, columnId }: IEditCardSavePayload) =>
+  (dispatch) => {
+    dispatch(editCardSaveAction({ cardId, columnId, content }));
+    dispatch(setCardEditingStateAction(null));
   };
 
 export default cardListSlice.reducer;
