@@ -9,6 +9,7 @@ import { ICardItmesModel } from '@/interfaces/api/card';
 import { swapItem } from '@/utils';
 import { Action, createSlice, CreateSliceOptions, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
 import { ActionType } from 'typesafe-actions';
+import { deleteById } from '@/utils/handleArray';
 import { IRootState } from './RootState';
 import { setEditingStateAction } from './Editing';
 
@@ -58,8 +59,7 @@ const reducers: CreateSliceOptions['reducers'] = {
   },
   deleteColumn: (state: ICardList, action: PayloadAction<IDeleteColumnPayload>) => {
     const deleteColumnId = action.payload.id;
-    const deleteColumnIndex = state.findIndex((el) => el.id === deleteColumnId);
-    state.splice(deleteColumnIndex, 1);
+    deleteById(state, deleteColumnId);
   },
   editColumnSave: (state: ICardList, action: PayloadAction<IEditColumnSavePayload>) => {
     const { id, newTitle } = action.payload;
@@ -73,11 +73,9 @@ const reducers: CreateSliceOptions['reducers'] = {
     state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id, isEditing: action.payload.isEditing });
   },
   deleteCard: (state: ICardList, action: PayloadAction<IDeleteCardPayload>) => {
-    const deleteCardId = action.payload.id;
-    const deleteCardColumnTitle = action.payload.title;
-    const deleteCardColumnIndex = state.findIndex((el) => el.title === deleteCardColumnTitle);
-    const deleteCardIndex = state[deleteCardColumnIndex].items.findIndex((el) => el.id === deleteCardId);
-    state[deleteCardColumnIndex].items.splice(deleteCardIndex, 1);
+    const { id, title } = action.payload;
+    const deleteCardColumnIndex = state.findIndex((el) => el.title === title);
+    deleteById(state[deleteCardColumnIndex].items, id);
   },
   editCardStart: (state: ICardList, action: PayloadAction<IEditCardStartPayload>) => {
     // columnindex에서 cardindex를 꺼낸다. 그리고 edit

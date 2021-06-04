@@ -11,7 +11,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
       const index = cardList.findIndex((el) => el.id === id);
       const deletedColumn = cardList.splice(index, 1);
       CardListModel.writeData(cardList);
-      res.status(200).json(deletedColumn);
+      res.status(200).json(deletedColumn[0]);
       break;
     }
     case 'PATCH': {
