@@ -9,24 +9,31 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
   const editingInput = useRef<HTMLInputElement>();
 
   useEffect(() => {
-    const handleOuterClick = (e: React.MouseEvent): void => {
-      const target = e.target as Element;
-      if (!editingInput.current.contains(target)) {
-        return handleItemSave(value);
-      }
-    };
-
     document.addEventListener('mousedown', handleOuterClick);
+    editingInput.current.focus();
     return () => {
       document.removeEventListener('mousedown', handleOuterClick);
     };
   }, [value]);
+
+  const handleOuterClick = (e: React.MouseEvent): void => {
+    const target = e.target as Element;
+    if (!editingInput.current.contains(target)) {
+      return handleItemSave(value);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent): void => {
     const inputElement = e.target as HTMLInputElement;
     const currentValue = inputElement.value;
     setValue(currentValue);
   };
+
+  const preventAndStopEvent = (e: React.SyntheticEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   return (
     <input
       ref={editingInput}
@@ -35,6 +42,13 @@ const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === 'Escape') return handleItemSave(value);
       }}
+      onDrag={preventAndStopEvent}
+      onDragEnter={preventAndStopEvent}
+      onDragStart={preventAndStopEvent}
+      onDragOver={preventAndStopEvent}
+      onDragEnd={preventAndStopEvent}
+      onDrop={preventAndStopEvent}
+      draggable="true"
       type="text"
     />
   );
