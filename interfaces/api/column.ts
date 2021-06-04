@@ -1,7 +1,7 @@
 import { ICardItmesModel } from './card';
 
 export interface IColumnModel {
-  id?: string;
+  id: string;
   title: string;
   items: ICardItmesModel;
 }

@@ -1,17 +1,12 @@
 /* eslint-disable no-param-reassign */
-interface Item {
-  title: string;
-  id: string;
-}
-
-export const findById = (array: Array<Item>, id: string): { item: Item; index: number } => {
+export const findById = <T extends { id: string }>(array: Array<T>, id: string): { item: T; index: number } => {
   const item = array.find((el) => el.id === id);
   const index = array.findIndex((el) => el.id === id);
   return { item, index };
 };
 
-export const deleteById = (array: Array<Item>, id: string): undefined => {
-  const { index } = findById(array, id);
+export const deleteById = <T extends { id: string }>(array: Array<T>, id: string): undefined => {
+  const { index } = findById<T>(array, id);
   if (index < 0) return;
   array.splice(index, 1);
 };
