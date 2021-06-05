@@ -2,5 +2,8 @@ import { ICardList } from '@/interfaces/ICardList';
 
 export interface IRootState {
   cardList: ICardList;
-  editing: string;
+  editing: {
+    columnId: string;
+    cardId: string;
+  };
 }
