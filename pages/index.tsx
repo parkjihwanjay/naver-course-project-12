@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { DragNDrop } from '@/components';
 import useRedux from '@/hooks/redux';
 import {
-  addCardAction,
   deleteCardAction,
   editColumnSaveThunk,
   addColumnThunk,
@@ -13,6 +12,7 @@ import {
   dragCardAction,
   deleteColumnThunk,
   editCardSaveThunk,
+  addCardThunk,
 } from '@/store/modules/CardList';
 import { dragCardDTO } from '@/interfaces/api/card';
 import { ICardList, IDragColumnPayload } from '@/interfaces/ICardList';
@@ -32,8 +32,8 @@ const Home: React.FC = () => {
   const editColumnSave = (id: string, newTitle: string) => {
     dispatch(editColumnSaveThunk(id, newTitle));
   };
-  const addCard = (columnId, content, id) => {
-    dispatch(addCardAction({ columnId, content, id, isEditing: true }));
+  const addCard = (columnId: string, content: string) => {
+    dispatch(addCardThunk(columnId, content));
   };
   const deleteCard = (columnId, id) => {
     dispatch(deleteCardAction({ columnId, id }));
