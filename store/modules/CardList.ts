@@ -5,7 +5,7 @@ import CardApi from '@/api/card';
 import { IColumn } from '@/interfaces/IColumn';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 import { ICardListModel } from '@/interfaces/api/card-list';
-import { ICardItmesModel } from '@/interfaces/api/card';
+import { ICardItmesModel, ICardModel } from '@/interfaces/api/card';
 import { swapItem } from '@/utils';
 import { Action, createSlice, CreateSliceOptions, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
 import { ActionType } from 'typesafe-actions';
@@ -29,8 +29,7 @@ interface IEditColumnSavePayload {
 }
 interface IAddCardPayload {
   columnId: string;
-  content: string;
-  id: string;
+  card: ICardModel;
 }
 interface IDeleteCardPayload {
   columnId: string;
@@ -62,10 +61,10 @@ const reducers: CreateSliceOptions['reducers'] = {
     columnToEdit.item.title = newTitle;
   },
   addCard: (state: ICardList, action: PayloadAction<IAddCardPayload>) => {
-    const addCardColumnId = action.payload.columnId;
-    const temp = action.payload.content;
-    const addCardColumnIndex = state.findIndex((el) => el.id === addCardColumnId);
-    state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id });
+    const { columnId, card } = action.payload;
+    const result = findById(state, columnId);
+    const column = result.item;
+    column.items.push(card);
   },
   deleteCard: (state: ICardList, action: PayloadAction<IDeleteCardPayload>) => {
     const { columnId, id } = action.payload;
@@ -117,6 +116,11 @@ export const addColumnThunk =
     const [data, error] = await ColumnApi.addColumn({ title, items });
     dispatch(addColumnAction(data));
   };
+
+export const addCardThunk = (columnId: string, content: string) => async (dispatch) => {
+  const [data, error] = await CardApi.addCard(columnId, content);
+  dispatch(addCardAction({ columnId, card: data }));
+};
 
 export const initializeThunk = (): ThunkAction<void, IRootState, null, ActionType<typeof initializeAction>> => async (dispatch) => {
   const [data, error] = await CardListApi.getCardList();
