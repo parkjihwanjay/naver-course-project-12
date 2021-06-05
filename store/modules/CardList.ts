@@ -9,7 +9,8 @@ import { ICardItmesModel } from '@/interfaces/api/card';
 import { swapItem } from '@/utils';
 import { Action, createSlice, CreateSliceOptions, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
 import { ActionType } from 'typesafe-actions';
-import { deleteById } from '@/utils/handleArray';
+import { deleteById, findById } from '@/utils/handleArray';
+import { ICard } from '@/interfaces/ICard';
 import { IRootState } from './RootState';
 import { setEditingStateAction } from './Editing';
 
@@ -59,12 +60,12 @@ const reducers: CreateSliceOptions['reducers'] = {
   },
   deleteColumn: (state: ICardList, action: PayloadAction<IDeleteColumnPayload>) => {
     const deleteColumnId = action.payload.id;
-    deleteById(state, deleteColumnId);
+    deleteById<IColumn>(state, deleteColumnId);
   },
   editColumnSave: (state: ICardList, action: PayloadAction<IEditColumnSavePayload>) => {
     const { id, newTitle } = action.payload;
-    const columnToEdit = state.find((el) => el.id === id);
-    columnToEdit.title = newTitle;
+    const columnToEdit = findById<IColumn>(state, id);
+    columnToEdit.item.title = newTitle;
   },
   addCard: (state: ICardList, action: PayloadAction<IAddCardPayload>) => {
     const addCardColumnTitle = action.payload.columnTitle;
@@ -75,7 +76,7 @@ const reducers: CreateSliceOptions['reducers'] = {
   deleteCard: (state: ICardList, action: PayloadAction<IDeleteCardPayload>) => {
     const { id, title } = action.payload;
     const deleteCardColumnIndex = state.findIndex((el) => el.title === title);
-    deleteById(state[deleteCardColumnIndex].items, id);
+    deleteById<ICard>(state[deleteCardColumnIndex].items, id);
   },
   editCardStart: (state: ICardList, action: PayloadAction<IEditCardStartPayload>) => {
     // columnindex에서 cardindex를 꺼낸다. 그리고 edit
@@ -98,9 +99,9 @@ const reducers: CreateSliceOptions['reducers'] = {
   },
   dragColumn: (state: ICardList, action: PayloadAction<IDragColumnPayload>) => {
     const { targetColumnId, dragColumnId } = action.payload;
-    const grpI = state.findIndex((el) => el.id === targetColumnId);
-    const dragColumnIndex = state.findIndex((el) => el.id === dragColumnId);
-    swapItem<IColumn>(state, grpI, dragColumnIndex);
+    const targetColumn = findById<IColumn>(state, targetColumnId);
+    const dragColumn = findById<IColumn>(state, dragColumnId);
+    swapItem<IColumn>(state, targetColumn.index, dragColumn.index);
   },
 };
 
