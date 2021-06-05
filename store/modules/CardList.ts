@@ -28,12 +28,12 @@ interface IEditColumnSavePayload {
   newTitle: string;
 }
 interface IAddCardPayload {
-  columnTitle: string;
+  columnId: string;
   content: string;
   id: string;
 }
 interface IDeleteCardPayload {
-  title: string;
+  columnId: string;
   id: string;
 }
 interface IEditCardSavePayload {
@@ -62,14 +62,14 @@ const reducers: CreateSliceOptions['reducers'] = {
     columnToEdit.item.title = newTitle;
   },
   addCard: (state: ICardList, action: PayloadAction<IAddCardPayload>) => {
-    const addCardColumnTitle = action.payload.columnTitle;
+    const addCardColumnId = action.payload.columnId;
     const temp = action.payload.content;
-    const addCardColumnIndex = state.findIndex((el) => el.title === addCardColumnTitle);
-    state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id, isEditing: action.payload.isEditing });
+    const addCardColumnIndex = state.findIndex((el) => el.id === addCardColumnId);
+    state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id });
   },
   deleteCard: (state: ICardList, action: PayloadAction<IDeleteCardPayload>) => {
-    const { id, title } = action.payload;
-    const deleteCardColumnIndex = state.findIndex((el) => el.title === title);
+    const { columnId, id } = action.payload;
+    const deleteCardColumnIndex = state.findIndex((el) => el.id === columnId);
     deleteById<ICard>(state[deleteCardColumnIndex].items, id);
   },
   editCardSave: (state: ICardList, action: PayloadAction<IEditCardSavePayload>) => {

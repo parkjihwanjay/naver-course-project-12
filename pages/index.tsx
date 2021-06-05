@@ -32,11 +32,11 @@ const Home: React.FC = () => {
   const editColumnSave = (id: string, newTitle: string) => {
     dispatch(editColumnSaveThunk(id, newTitle));
   };
-  const addCard = (columnTitle, content, id) => {
-    dispatch(addCardAction({ columnTitle, content, id, isEditing: true }));
+  const addCard = (columnId, content, id) => {
+    dispatch(addCardAction({ columnId, content, id, isEditing: true }));
   };
-  const deleteCard = (title, id) => {
-    dispatch(deleteCardAction({ title, id }));
+  const deleteCard = (columnId, id) => {
+    dispatch(deleteCardAction({ columnId, id }));
   };
   const editCardStart = (id: string) => {
     dispatch(setCardEditingStateAction(id));
