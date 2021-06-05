@@ -141,7 +141,8 @@ export const dragCardThunk =
     dispatch(setCardListAction(data));
   };
 
-export const editColumnSaveThunk = (id: string, newTitle: string) => (dispatch) => {
+export const editColumnSaveThunk = (id: string, newTitle: string) => async (dispatch) => {
+  const [data, error] = await ColumnApi.editColumnTitle(id, newTitle);
   dispatch(editColumnSaveAction({ id, newTitle }));
   dispatch(setColumnEditingStateAction(null));
 };
