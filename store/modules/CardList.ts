@@ -33,7 +33,7 @@ interface IAddCardPayload {
   id: string;
 }
 interface IDeleteCardPayload {
-  title: string;
+  columnId: string;
   id: string;
 }
 interface IEditCardSavePayload {
@@ -68,8 +68,8 @@ const reducers: CreateSliceOptions['reducers'] = {
     state[addCardColumnIndex].items.push({ content: action.payload.content, id: action.payload.id });
   },
   deleteCard: (state: ICardList, action: PayloadAction<IDeleteCardPayload>) => {
-    const { id, title } = action.payload;
-    const deleteCardColumnIndex = state.findIndex((el) => el.title === title);
+    const { columnId, id } = action.payload;
+    const deleteCardColumnIndex = state.findIndex((el) => el.id === columnId);
     deleteById<ICard>(state[deleteCardColumnIndex].items, id);
   },
   editCardSave: (state: ICardList, action: PayloadAction<IEditCardSavePayload>) => {

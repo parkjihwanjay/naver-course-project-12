@@ -35,8 +35,8 @@ const Home: React.FC = () => {
   const addCard = (columnId, content, id) => {
     dispatch(addCardAction({ columnId, content, id, isEditing: true }));
   };
-  const deleteCard = (title, id) => {
-    dispatch(deleteCardAction({ title, id }));
+  const deleteCard = (columnId, id) => {
+    dispatch(deleteCardAction({ columnId, id }));
   };
   const editCardStart = (id: string) => {
     dispatch(setCardEditingStateAction(id));
