@@ -1,0 +1,27 @@
+POST http://localhost:3000/api/card HTTP/1.1
+content-type: application/json
+
+{
+  "columnId" : "3",
+  "card" : {
+    "title" : "test",
+    "content" : "test-content",
+    "date" : "2015-03-17",
+    "label" : "red"
+  }
+}
+
+# Response : newly created Card
+
+{
+  "title": "test",
+  "content": "test-content",
+  "date": "2015-03-17",
+  "label": "red",
+  "id": "112"
+}
+
+###
+
+
+
