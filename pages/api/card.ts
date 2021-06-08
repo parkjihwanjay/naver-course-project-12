@@ -14,11 +14,11 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
       break;
     }
     case 'POST': {
-      const { columnId, content } = req.body;
+      const { columnId, card } = req.body;
       const { item } = findById(cardList, columnId);
       const targetColumn = item;
-      const newCard = { content, id: `${counter + 1}` };
-      targetColumn.items.push({ content, id: `${counter + 1}` });
+      const newCard = { ...card, id: `${counter + 1}` };
+      targetColumn.items.push(newCard);
       CardListModel.writeCounter(counter + 1);
       CardListModel.writeData(cardList);
       res.status(200).json(newCard);

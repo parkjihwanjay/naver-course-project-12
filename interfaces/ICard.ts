@@ -13,3 +13,7 @@ export interface IDragCardPayload {
   dragColumnIndex: number;
   dragItemCardIndex: number;
 }
+
+export interface addCardPayload extends ICard {
+  columnId: string;
+}
