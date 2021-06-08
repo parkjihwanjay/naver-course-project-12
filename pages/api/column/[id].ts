@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import CardListModel from '@/data/model/CardListModel';
-import { ICardListModel } from '@/interfaces/api/card-list';
+import { ICardList } from '@/interfaces/ICardList';
 
 export default (req: NextApiRequest, res: NextApiResponse): void => {
   const { id } = req.query;
-  const cardList = CardListModel.readData<ICardListModel>();
+  const cardList = CardListModel.readData<ICardList>();
 
   switch (req.method) {
     case 'DELETE': {

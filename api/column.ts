@@ -1,14 +1,13 @@
 import { TReturn } from '@/interfaces/api';
-import { addColumnDTO, IColumnModel, dragColumnDTO } from '@/interfaces/api/column';
+import { addColumnDTO, IColumn } from '@/interfaces/IColumn';
 import { ICardList } from '@/interfaces/ICardList';
 import { ICard } from '@/interfaces/ICard';
 
-import { ICardListModel } from '@/interfaces/api/card-list';
 import fetchApi from './fetch';
 import urls from './config/urls';
 
 const ColumnApi = {
-  addColumn: ({ title, items }: addColumnDTO): TReturn<IColumnModel> => {
+  addColumn: ({ title, items }: addColumnDTO): TReturn<IColumn> => {
     return fetchApi({
       url: urls.COLUMN,
       method: 'POST',
@@ -18,7 +17,7 @@ const ColumnApi = {
       },
     });
   },
-  dragColumn: (list: ICardList): TReturn<ICardListModel> => {
+  dragColumn: (list: ICardList): TReturn<ICardList> => {
     return fetchApi({
       url: urls.COLUMN,
       method: 'PATCH',
@@ -27,7 +26,7 @@ const ColumnApi = {
       },
     });
   },
-  deleteColumn: (id: string): TReturn<IColumnModel> => {
+  deleteColumn: (id: string): TReturn<IColumn> => {
     return fetchApi({
       url: `${urls.COLUMN}/${id}`,
       method: 'DELETE',

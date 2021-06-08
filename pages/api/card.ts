@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import CardListModel from '@/data/model/CardListModel';
-import { ICardListModel } from '@/interfaces/api/card-list';
+import { ICardList } from '@/interfaces/ICardList';
 import { findById } from '@/utils';
 
 export default (req: NextApiRequest, res: NextApiResponse): void => {
-  const cardList = CardListModel.readData<ICardListModel>();
+  const cardList = CardListModel.readData<ICardList>();
   const counter = CardListModel.readCounter();
   switch (req.method) {
     case 'PATCH': {
       const { list } = req.body;
-      CardListModel.writeData<ICardListModel>(list);
+      CardListModel.writeData<ICardList>(list);
       res.status(200).json(list);
       break;
     }
