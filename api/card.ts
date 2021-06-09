@@ -1,6 +1,6 @@
 import { ICardList } from '@/interfaces/ICardList';
 import { TReturn } from '@/interfaces/api';
-import { ICardModel } from '@/interfaces/api/card';
+import { addCardPayload, ICard } from '@/interfaces/ICard';
 import fetchApi from './fetch';
 import urls from './config/urls';
 
@@ -12,14 +12,11 @@ const CardApi = {
       data: { list },
     });
   },
-  addCard: (columnId: string, content: string): TReturn<ICardModel> => {
+  addCard: (params: addCardPayload): TReturn<ICard> => {
     return fetchApi({
       url: urls.CARD,
       method: 'POST',
-      data: {
-        columnId,
-        content,
-      },
+      data: params,
     });
   },
 };

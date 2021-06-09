@@ -1,34 +1,14 @@
 import { deleteById, swapItem, findById } from '../utils';
 import { IColumn } from '../interfaces/IColumn';
-
-const initialData = [
-  {
-    title: 'group 1',
-    items: [
-      { id: '4', content: '2' },
-      { id: '5', content: '2' },
-      { id: '6', content: '2' },
-    ],
-    id: '1',
-  },
-  {
-    title: 'group 2',
-    items: [
-      { id: '7', content: '2' },
-      { id: '8', content: '2' },
-    ],
-    id: '2',
-  },
-  { title: 'group 3', items: [], id: '3' },
-];
+import initialData from './initialData';
 
 const afterDelete = [
   {
     title: 'group 1',
     items: [
-      { id: '4', content: '2' },
-      { id: '5', content: '2' },
-      { id: '6', content: '2' },
+      { id: '5', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
+      { id: '4', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
+      { id: '6', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
     ],
     id: '1',
   },
@@ -39,17 +19,17 @@ const afterSwap = [
   {
     title: 'group 2',
     items: [
-      { id: '7', content: '2' },
-      { id: '8', content: '2' },
+      { id: '7', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
+      { id: '8', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
     ],
     id: '2',
   },
   {
     title: 'group 1',
     items: [
-      { id: '4', content: '2' },
-      { id: '5', content: '2' },
-      { id: '6', content: '2' },
+      { id: '5', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
+      { id: '4', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
+      { id: '6', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
     ],
     id: '1',
   },
@@ -75,9 +55,9 @@ test('find element that has id 2 in array', () => {
   expect(item).toStrictEqual({
     title: 'group 1',
     items: [
-      { id: '4', content: '2' },
-      { id: '5', content: '2' },
-      { id: '6', content: '2' },
+      { id: '5', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
+      { id: '4', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
+      { id: '6', content: '2', title: 'title', date: new Date('2021-02-07'), label: 'red' },
     ],
     id: '1',
   });

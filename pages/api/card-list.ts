@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import CardListModel from '@/data/model/CardListModel';
-import { ICardListModel } from '@/interfaces/api/card-list';
+import { ICardList } from '@/interfaces/ICardList';
 
 export default (req: NextApiRequest, res: NextApiResponse): void => {
   switch (req.method) {
     case 'GET': {
-      const cardList = CardListModel.readData<ICardListModel>();
+      const cardList = CardListModel.readData<ICardList>();
       res.status(200).json(cardList);
       break;
     }
