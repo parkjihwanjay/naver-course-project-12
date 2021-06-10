@@ -4,7 +4,7 @@ import React, { useState, useRef, SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
 import { ICard } from '@/interfaces/ICard';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
-import { Card, TextInput } from '@/components';
+import { Column } from '@/components';
 
 interface IProps {
   addColumn: (title: string) => void;
@@ -142,46 +142,27 @@ const DragNDrop: React.FC<IProps> = ({
   return (
     <div className="drag-n-drop">
       {list.map((column, columnIndex) => (
-        <div
+        <Column
           key={column.id}
-          draggable
-          className="dnd-group"
-          onDragEnter={(e) => handleDragEnter(e, { column, cardIndex: 0, columnIndex })}
-          onDragStart={(e) => handleDragStart(e, { column, cardIndex: 0, columnIndex })}
-          onDragOver={preventEvent}
-          onDragEnd={initialize}
-          onDrop={handleDrop}
-        >
-          <div>
-            {editing.columnId === column.id ? (
-              <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
-            ) : (
-              <div onClick={(e) => handleEditColumnStart(column.id)}>{column.title}</div>
-            )}
-            <input type="button" value="delete" onClick={() => deleteColumn(column.id)} />
-          </div>
-          {column.items.map((card, cardIndex) => (
-            <Card
-              key={card.id}
-              column={column}
-              columnIndex={columnIndex}
-              card={card}
-              cardIndex={cardIndex}
-              dragging={dragging}
-              editing={editing}
-              getStyles={getStyles}
-              preventEvent={preventEvent}
-              initialize={initialize}
-              handleDragStart={handleDragStart}
-              handleDragEnter={handleDragEnter}
-              handleCardDrop={handleCardDrop}
-              handleEditCardStart={handleEditCardStart}
-              handleEditCardSave={handleEditCardSave}
-              deleteCard={deleteCard}
-            />
-          ))}
-          <input type="button" value="cardadd" onClick={() => addCard(column.id, 'new')} />
-        </div>
+          column={column}
+          columnIndex={columnIndex}
+          dragging={dragging}
+          editing={editing}
+          getStyles={getStyles}
+          preventEvent={preventEvent}
+          initialize={initialize}
+          handleDragStart={handleDragStart}
+          handleDragEnter={handleDragEnter}
+          handleDrop={handleDrop}
+          handleCardDrop={handleCardDrop}
+          handleEditColumnStart={handleEditColumnStart}
+          handleEditColumnSave={handleEditColumnSave}
+          handleEditCardStart={handleEditCardStart}
+          handleEditCardSave={handleEditCardSave}
+          deleteColumn={deleteColumn}
+          addCard={addCard}
+          deleteCard={deleteCard}
+        />
       ))}
       <input type="button" value="plus" onClick={() => addColumn('group-5')} />
     </div>
