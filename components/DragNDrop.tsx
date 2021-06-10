@@ -4,7 +4,7 @@ import React, { useState, useRef, SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
 import { ICard } from '@/interfaces/ICard';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
-import { TextInput } from '@/components';
+import { Card, TextInput } from '@/components';
 
 interface IProps {
   addColumn: (title: string) => void;
@@ -161,29 +161,24 @@ const DragNDrop: React.FC<IProps> = ({
             <input type="button" value="delete" onClick={() => deleteColumn(column.id)} />
           </div>
           {column.items.map((card, cardIndex) => (
-            <div
-              draggable
-              data-id={card.id}
+            <Card
               key={card.id}
-              className={dragging ? getStyles({ column, columnIndex, cardIndex }) : 'dnd-item'}
-              onDragStart={(e) => handleDragStart(e, { column, cardIndex, columnIndex })}
-              onDragEnter={(e) => handleDragEnter(e, { column, cardIndex, columnIndex })}
-              onDragOver={preventEvent}
-              onDragEnd={initialize}
-              onDrop={(e) => handleCardDrop(e)}
-            >
-              <div>
-                {editing.cardId === card.id ? (
-                  <TextInput defaultValue={card.content} handleItemSave={(newContent) => handleEditCardSave(column.id, card.id, newContent)} />
-                ) : (
-                  <div onClick={(e) => handleEditCardStart(card.id)}>{card.content}</div>
-                )}
-
-                <button type="button" value="carddel" onClick={() => deleteCard(column.id, card.id)}>
-                  Delete
-                </button>
-              </div>
-            </div>
+              column={column}
+              columnIndex={columnIndex}
+              card={card}
+              cardIndex={cardIndex}
+              dragging={dragging}
+              editing={editing}
+              getStyles={getStyles}
+              preventEvent={preventEvent}
+              initialize={initialize}
+              handleDragStart={handleDragStart}
+              handleDragEnter={handleDragEnter}
+              handleCardDrop={handleCardDrop}
+              handleEditCardStart={handleEditCardStart}
+              handleEditCardSave={handleEditCardSave}
+              deleteCard={deleteCard}
+            />
           ))}
           <input type="button" value="cardadd" onClick={() => addCard(column.id, 'new')} />
         </div>
