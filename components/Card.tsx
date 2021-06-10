@@ -2,6 +2,10 @@ import React, { SyntheticEvent } from 'react';
 import { ICard } from '@/interfaces/ICard';
 import { IColumn } from '@/interfaces/IColumn';
 import { TextInput } from '@/components';
+import classNames from 'classnames/bind';
+import styles from './Card.module.css';
+
+const cx = classNames.bind(styles);
 
 interface IDragParams {
   column: IColumn;
@@ -49,7 +53,7 @@ const Card: React.FC<IProps> = ({
     <div
       draggable
       data-id={card.id}
-      className={dragging ? getStyles({ column, columnIndex, cardIndex }) : 'dnd-item'}
+      className={cx('carditem', dragging ? getStyles({ column, columnIndex, cardIndex }) : 'dnd-item')}
       onDragStart={(e) => handleDragStart(e, { column, cardIndex, columnIndex })}
       onDragEnter={(e) => handleDragEnter(e, { column, cardIndex, columnIndex })}
       onDragOver={preventEvent}
@@ -63,7 +67,7 @@ const Card: React.FC<IProps> = ({
           <div onClick={(e) => handleEditCardStart(card.id)}>{card.content}</div>
         )}
 
-        <button type="button" value="carddel" onClick={() => deleteCard(column.id, card.id)}>
+        <button type="button" value="carddel" className={styles.delbtn} onClick={() => deleteCard(column.id, card.id)}>
           Delete
         </button>
       </div>

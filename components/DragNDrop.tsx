@@ -5,6 +5,7 @@ import { IColumn } from '@/interfaces/IColumn';
 import { ICard } from '@/interfaces/ICard';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 import { Column } from '@/components';
+import styles from './DragNDrop.module.css';
 
 interface IProps {
   addColumn: (title: string) => void;
@@ -140,7 +141,7 @@ const DragNDrop: React.FC<IProps> = ({
   };
 
   return (
-    <div className="drag-n-drop">
+    <div className={styles['drag-n-drop']}>
       {list.map((column, columnIndex) => (
         <Column
           key={column.id}
