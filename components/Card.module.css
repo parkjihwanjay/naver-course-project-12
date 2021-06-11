@@ -10,23 +10,41 @@
     padding-left: 15px;
 }
 
+.label-blue:not(:last-of-type){
+    margin-right: 0.4rem;
+}
+
+.label-red:not(:last-of-type){
+    margin-right: 0.4rem;
+}
+
+
 .label-red {
-    width: 30px;
+    width: 40px;
     height: 10px;
     background-color: red;
     padding-top: 13px;
     border-radius: 5px;
     margin-left: 10px;
+    
 }
 
-
 .label-blue {
-    width: 30px;
+    width: 40px;
     height: 10px;
     background-color: blue;
     padding-top: 13px;
+    padding-left: 10px;
     border-radius: 5px;
-    margin-left: 10px;
+}
+
+.label-yellow {
+    width: 40px;
+    height: 10px;
+    background-color: yellow;
+    padding-top: 13px;
+    padding-left: 10px;
+    border-radius: 5px;
 }
 
 .cardtitle {
@@ -40,7 +58,8 @@
     display: flex;
     flex-direction: row;
     justify-content: start;
-    padding-left: 5px;
+    padding-left: 7px;
+    padding-bottom: 10px;
 }
 
 .drag-n-drop {

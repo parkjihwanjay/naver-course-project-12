@@ -66,6 +66,7 @@ const Card: React.FC<IProps> = ({
       <div className={cx('labels')}>
         <div className={cx('label-red')} />
         <div className={cx('label-blue')} />
+        <div className={cx('label-yellow')} />
       </div>
       <div className={cx('cardtitle')}>
         {editing.cardId === card.id ? (
