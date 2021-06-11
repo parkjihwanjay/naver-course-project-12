@@ -1,7 +1,10 @@
 import React, { SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
 import { Card, TextInput } from '@/components';
+import classNames from 'classnames/bind';
 import styles from './Column.module.css';
+
+const cx = classNames.bind(styles);
 
 interface IDragParams {
   column: IColumn;
@@ -54,7 +57,7 @@ const Column: React.FC<IProps> = ({
   return (
     <div
       draggable
-      className={styles['dnd-group']}
+      className={cx('dndGroup')}
       onDragEnter={(e) => handleDragEnter(e, { column, cardIndex: 0, columnIndex })}
       onDragStart={(e) => handleDragStart(e, { column, cardIndex: 0, columnIndex })}
       onDragOver={preventEvent}

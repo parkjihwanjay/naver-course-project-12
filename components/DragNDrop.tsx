@@ -73,7 +73,7 @@ const DragNDrop: React.FC<IProps> = ({
     e.stopPropagation();
     const target = e.currentTarget;
 
-    if (target.className === 'dnd-group') {
+    if (target.className === 'dndGroup') {
       dragColumn.current = { column, cardIndex, columnIndex };
       dragColumnNode.current = target;
       setDragging(false);
@@ -89,7 +89,7 @@ const DragNDrop: React.FC<IProps> = ({
     if (dragging) {
       const target = e.currentTarget;
       if (dragItemNode.current === target) return;
-      if (column.items.length && target.className === 'dnd-group') return;
+      if (column.items.length && target.className === 'dndGroup') return;
       if (dragItemNode.current.dataset.id === target.dataset.id) return;
       const dragColumnIndex = dragItem.current.columnIndex;
       const dragItemCardIndex = dragItem.current.cardIndex;
@@ -135,9 +135,9 @@ const DragNDrop: React.FC<IProps> = ({
 
   const getStyles = (params: IDragParams): string => {
     const currentItem = dragItem.current;
-    if (currentItem.columnIndex === params.columnIndex && currentItem.cardIndex === params.cardIndex) return 'current dnd-item';
+    if (currentItem.columnIndex === params.columnIndex && currentItem.cardIndex === params.cardIndex) return 'current dndItem';
 
-    return 'dnd-item';
+    return 'dndItem';
   };
 
   return (

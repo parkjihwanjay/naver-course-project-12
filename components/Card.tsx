@@ -56,7 +56,7 @@ const Card: React.FC<IProps> = ({
     <div
       draggable
       data-id={card.id}
-      className={cx(dragging ? getStyles({ column, columnIndex, cardIndex }) : 'dnd-item')}
+      className={cx(dragging ? getStyles({ column, columnIndex, cardIndex }) : 'dndItem')}
       onDragStart={(e) => handleDragStart(e, { column, cardIndex, columnIndex })}
       onDragEnter={(e) => handleDragEnter(e, { column, cardIndex, columnIndex })}
       onDragOver={preventEvent}
@@ -68,14 +68,14 @@ const Card: React.FC<IProps> = ({
         <div className={cx('label-blue')} />
         <div className={cx('label-yellow')} />
       </div>
-      <div className={cx('cardtitle')}>
+      <div className={cx('cardTitle')}>
         {editing.cardId === card.id ? (
           <TextInput defaultValue={card.content} handleItemSave={(newContent) => handleEditCardSave(column.id, card.id, newContent)} />
         ) : (
           <div onClick={(e) => handleEditCardStart(card.id)}>{card.content}</div>
         )}
       </div>
-      <div className={styles.icons}>
+      <div className={cx('icons')}>
         <IconButton aria-label="delete" size="small" onClick={() => deleteCard(column.id, card.id)}>
           <DeleteIcon />
         </IconButton>

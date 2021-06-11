@@ -1,4 +1,4 @@
-.one-card { 
+.oneCard { 
     background-color: aqua;
 }
 
@@ -47,7 +47,7 @@
     border-radius: 5px;
 }
 
-.cardtitle {
+.cardTitle {
     padding: 10px;
     padding-left: 15px;
     text-align: left;
@@ -63,43 +63,43 @@
 }
 
 .drag-n-drop {
-    padding: 0.5rem;
-    display: grid;
-    gap: 0.5rem;
-    width: 100%;
-    height: 100%;
-    grid-template-columns: repeat(auto-fill, 300px);
-    align-items: start;
-  }
+  padding: 0.5rem;
+  display: grid;
+  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: repeat(auto-fill, 300px);
+  align-items: start;
+}
   
-  .dnd-group {
-    background-color: #49505e;
-    border-radius: 5px;
-    padding: 0.5rem;
-  }
+.dndGroup {
+  background-color: #49505e;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
   
-  .dnd-item {
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    overflow:hidden;
-    justify-content: start;
-    align-items: stretch;
-    min-height: 100px;
-    background-color: white;
-    border-radius: 5px;
-    color: #282c34;
-    font-weight: normal;
-  }
+.dndItem {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  overflow:hidden;
+  justify-content: start;
+  align-items: stretch;
+  min-height: 100px;
+  background-color: white;
+  border-radius: 5px;
+  color: #282c34;
+  font-weight: normal;
+}
   
-  .dnd-item:not(:last-of-type) {
-    margin-bottom: 0.5rem;
-  }
+.dndItem:not(:last-of-type) {
+  margin-bottom: 0.5rem;
+}
   
-  .dnd-item * {
-    margin: 0;
-    font-size: 1rem;
-  }
+.dndItem * {
+  margin: 0;
+  font-size: 1rem;
+}
 
 
 

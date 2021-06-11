@@ -22,11 +22,11 @@
 }
 
 
-.dnd-item:not(:last-of-type) {
+.dndItem:not(:last-of-type) {
   margin-bottom: 0.5rem;
 }
 
-.dnd-item * {
+.dndItem * {
   margin: 0;
   font-size: 1rem;
 }
