@@ -3,6 +3,7 @@ import { ICard } from '@/interfaces/ICard';
 import { IColumn } from '@/interfaces/IColumn';
 import { TextInput } from '@/components';
 import classNames from 'classnames/bind';
+import * as Icon from 'react-feather';
 import styles from './Card.module.css';
 
 const cx = classNames.bind(styles);
@@ -53,23 +54,27 @@ const Card: React.FC<IProps> = ({
     <div
       draggable
       data-id={card.id}
-      className={cx('carditem', dragging ? getStyles({ column, columnIndex, cardIndex }) : 'dnd-item')}
+      className={cx(dragging ? getStyles({ column, columnIndex, cardIndex }) : 'dnd-item')}
       onDragStart={(e) => handleDragStart(e, { column, cardIndex, columnIndex })}
       onDragEnter={(e) => handleDragEnter(e, { column, cardIndex, columnIndex })}
       onDragOver={preventEvent}
       onDragEnd={initialize}
       onDrop={(e) => handleCardDrop(e)}
     >
-      <div>
+      <div className={cx('labels')}>
+        <div className={cx('label-red')} />
+        <div className={cx('label-blue')} />
+      </div>
+      <div className={cx('cardtitle')}>
         {editing.cardId === card.id ? (
           <TextInput defaultValue={card.content} handleItemSave={(newContent) => handleEditCardSave(column.id, card.id, newContent)} />
         ) : (
           <div onClick={(e) => handleEditCardStart(card.id)}>{card.content}</div>
         )}
-
-        <button type="button" value="carddel" className={styles.delbtn} onClick={() => deleteCard(column.id, card.id)}>
-          Delete
-        </button>
+      </div>
+      <div className={styles.icons}>
+        <Icon.Trash type="button" size={30} className={styles.btn} onClick={() => deleteCard(column.id, card.id)} />
+        <Icon.Edit type="button" size={30} className={styles.btn} />
       </div>
     </div>
   );

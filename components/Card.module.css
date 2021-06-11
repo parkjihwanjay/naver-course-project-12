@@ -2,16 +2,55 @@
     background-color: aqua;
 }
 
-.delbtn {
-    background-color: aquamarine;
+.btn {
+    padding-right: 10px;
+    flex-direction: row;
 }
 
-.carditem {
-    font-size: 15px;
-    margin-bottom: 10px;
+.btn:active{
+    box-shadow: silver;
+}
+
+.labels {
+    display: flex;
+    align-items: start;
+    flex-direction: row;
     padding: 10px;
+    padding-left: 15px;
+}
+
+.label-red {
+    width: 30px;
+    height: 10px;
+    background-color: red;
+    padding-top: 13px;
     border-radius: 5px;
-    z-index: 1;
+    margin-left: 10px;
+}
+
+
+.label-blue {
+    width: 30px;
+    height: 10px;
+    background-color: blue;
+    padding-top: 13px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.cardtitle {
+    padding: 10px;
+    padding-left: 15px;
+    text-align: left;
+    white-space: normal;
+}
+
+.icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding: 10px;
+    padding-left: 15px;
 }
 
 .drag-n-drop {
@@ -32,14 +71,16 @@
   
   .dnd-item {
     display: flex;
-    height: 250px;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    height: auto;
+    overflow:hidden;
+    justify-content: start;
+    align-items: stretch;
     min-height: 100px;
     background-color: white;
     border-radius: 5px;
     color: #282c34;
-    font-weight: bold;
+    font-weight: normal;
   }
   
   .dnd-item:not(:last-of-type) {
