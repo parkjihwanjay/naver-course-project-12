@@ -3,10 +3,9 @@ import { ICard } from '@/interfaces/ICard';
 import { IColumn } from '@/interfaces/IColumn';
 import { TextInput } from '@/components';
 import classNames from 'classnames/bind';
-import * as Icon from 'react-feather';
 import { IconButton } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import styles from './Card.module.css';
 
 const cx = classNames.bind(styles);
@@ -76,10 +75,10 @@ const Card: React.FC<IProps> = ({
         )}
       </div>
       <div className={styles.icons}>
-        <IconButton aria-label="delete" onClick={() => deleteCard(column.id, card.id)}>
+        <IconButton aria-label="delete" size="small" onClick={() => deleteCard(column.id, card.id)}>
           <DeleteIcon />
         </IconButton>
-        <IconButton aria-label="edit">
+        <IconButton aria-label="edit" size="small" onClick={(e) => handleEditCardStart(card.id)}>
           <EditIcon />
         </IconButton>
       </div>
