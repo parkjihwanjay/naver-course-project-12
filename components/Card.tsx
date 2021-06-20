@@ -71,18 +71,18 @@ const Card: React.FC<IProps> = ({
         onDragOver={preventEvent}
         onDragEnd={initialize}
         onDrop={(e) => handleCardDrop(e)}
-        onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}
+        // onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}
       >
-        <div className={cx('labels')}>
+        <div className={cx('labels')} onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}>
           <div className={cx('label-red')} />
           <div className={cx('label-blue')} />
           <div className={cx('label-yellow')} />
         </div>
-        <div className={cx('cardTitle')}>
+        <div className={cx('cardTitle')} onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}>
           {editing.cardId === card.id ? (
             <TextInput defaultValue={card.content} handleItemSave={(newContent) => handleEditCardSave(column.id, card.id, newContent)} />
           ) : (
-            <div onClick={(e) => handleEditCardStart(card.id)}>{card.content}</div>
+            <div>{card.content}</div>
           )}
         </div>
         <div className={cx('icons')}>
