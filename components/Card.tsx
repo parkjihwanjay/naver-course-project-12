@@ -74,9 +74,7 @@ const Card: React.FC<IProps> = ({
         // onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}
       >
         <div className={cx('labels')} onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}>
-          <div className={cx('label-red')} />
-          <div className={cx('label-blue')} />
-          <div className={cx('label-yellow')} />
+          <div className={cx(`${card.label}`)} />
         </div>
         <div className={cx('cardTitle')} onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}>
           {editing.cardId === card.id ? (

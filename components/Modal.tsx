@@ -16,10 +16,10 @@ const Modal = (props) => {
           </button>
         </header>
         <main>
-          <div>{id}</div>
           <div>{title}</div>
+          <div>{id}</div>
           <div>{content}</div>
-          <div>{label}</div>
+          <div className={cx(`${label}`)} />
           <div>{date}</div>
           <div>asdlfkaj;sdflajs</div>
         </main>

@@ -1,3 +1,32 @@
+.red {
+    width: 40px;
+    height: 10px;
+    background-color: red;
+    padding-top: 13px;
+    border-radius: 5px;
+    margin-left: 10px;
+    
+}
+
+.blue {
+    width: 40px;
+    height: 10px;
+    background-color: blue;
+    padding-top: 13px;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+
+.yellow {
+    width: 40px;
+    height: 10px;
+    background-color: yellow;
+    padding-top: 13px;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+
+
 .modal {
     display: none;
     position: fixed;
@@ -13,6 +42,8 @@
     cursor: pointer;
     border: 0;
 }
+
+
 .modal > section {
     width: 90%;
     max-width: 450px;
