@@ -5,6 +5,7 @@ import { Action } from 'typesafe-actions';
 
 interface IPopState {
   modalState: boolean;
+  columnId: string;
   cardId: string;
   cardTitle: string;
   cardContent: string;
@@ -15,6 +16,7 @@ interface IPopState {
 const reducers: CreateSliceOptions['reducers'] = {
   setModalPopState: (state: IPopState, action: PayloadAction<IPopState>) => {
     state.modalState = !action.payload.modalState;
+    state.columnId = action.payload.columnId;
     state.cardId = action.payload.cardId;
     state.cardTitle = action.payload.cardTitle;
     state.cardContent = action.payload.cardContent;
@@ -27,6 +29,7 @@ const popSlice = createSlice({
   name: 'pop',
   initialState: {
     modalState: false,
+    columnId: null,
     cardId: null,
     cardTitle: null,
     cardContent: null,

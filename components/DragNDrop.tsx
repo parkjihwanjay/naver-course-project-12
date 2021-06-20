@@ -16,7 +16,15 @@ interface IProps {
   editCardSave: (columnId: string, cardId: string, content: string) => void;
   editColumnStart: (id: string) => void;
   editColumnSave: (id: string, newTitle: string) => void;
-  popModal: (modalState: boolean, cardId: string, cardTitle: string, cardContent: string, cardDate: Date, cardLabel: string) => void;
+  popModal: (
+    modalState: boolean,
+    columnId: string,
+    cardId: string,
+    cardTitle: string,
+    cardContent: string,
+    cardDate: Date,
+    cardLabel: string,
+  ) => void;
   deleteColumn: (id: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
@@ -121,10 +129,16 @@ const DragNDrop: React.FC<IProps> = ({
   const handleEditColumnSave = (id: string, newTitle: string): void => {
     editColumnSave(id, newTitle);
   };
-  const handlePopModal = (modalState: boolean, cardId: string, cardTitle: string, cardContent: string, cardDate: Date, cardLabel: string): void => {
-    popModal(modalState, cardId, cardTitle, cardContent, cardDate, cardLabel);
-    console.log(pop.modalState);
-    console.log(pop.cardId);
+  const handlePopModal = (
+    modalState: boolean,
+    columnId: string,
+    cardId: string,
+    cardTitle: string,
+    cardContent: string,
+    cardDate: Date,
+    cardLabel: string,
+  ): void => {
+    popModal(modalState, columnId, cardId, cardTitle, cardContent, cardDate, cardLabel);
   };
   const handleEditCardStart = (id: string): void => {
     editCardStart(id);
@@ -147,6 +161,16 @@ const DragNDrop: React.FC<IProps> = ({
     if (currentItem.columnIndex === params.columnIndex && currentItem.cardIndex === params.cardIndex) return 'current dndItem';
 
     return 'dndItem';
+  };
+
+  const [editState, setEditState] = useState(false);
+
+  const editModal = () => {
+    setEditState(true);
+  };
+
+  const adminModal = () => {
+    setEditState(false);
   };
 
   return (
@@ -179,12 +203,17 @@ const DragNDrop: React.FC<IProps> = ({
       <input type="button" value="plus" onClick={() => addColumn('group-5')} />
       <Modal
         state={pop.modalState}
+        columnId={pop.columnId}
         id={pop.cardId}
         title={pop.cardTitle}
         content={pop.cardContent}
         date={pop.cardDate}
         label={pop.cardLabel}
         handlePopModal={handlePopModal}
+        editModal={editModal}
+        adminModal={adminModal}
+        editState={editState}
+        handleEditCardSave={handleEditCardSave}
       />
     </div>
   );

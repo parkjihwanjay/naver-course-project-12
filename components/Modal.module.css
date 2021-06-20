@@ -3,8 +3,9 @@
     height: 10px;
     background-color: red;
     padding-top: 13px;
+    margin-top: 40px;
     border-radius: 5px;
-    margin-left: 10px;
+    margin-left: 5px;
     
 }
 
@@ -13,6 +14,7 @@
     height: 10px;
     background-color: blue;
     padding-top: 13px;
+    margin-top: 40px;
     padding-left: 10px;
     border-radius: 5px;
 }
@@ -22,6 +24,7 @@
     height: 10px;
     background-color: yellow;
     padding-top: 13px;
+    margin-top: 40px;
     padding-left: 10px;
     border-radius: 5px;
 }
@@ -41,6 +44,7 @@
     outline: none;
     cursor: pointer;
     border: 0;
+    
 }
 
 
@@ -62,7 +66,7 @@
 }
 .modal > section > header button {
     position: absolute;
-    top: 15px;
+    top: 20px;
     right: 15px;
     width: 30px;
     font-size: 21px;
@@ -93,6 +97,18 @@
     align-items: center;
     /* 팝업이 열릴때 스르륵 열리는 효과 */
     animation: modal-bg-show .3s;
+}
+.title {
+    font-size: 30px;
+    font-weight: bolder;
+    float: left;
+}
+.content {
+    font-size: 15px;
+    font-weight: initial;
+    float: left;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 @keyframes modal-show {
     from {

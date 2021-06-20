@@ -33,8 +33,16 @@ const Home: React.FC = () => {
   const editColumnSave = (id: string, newTitle: string) => {
     dispatch(editColumnSaveThunk(id, newTitle));
   };
-  const popModal = (modalState: boolean, cardId: string, cardTitle: string, cardContent: string, cardDate: Date, cardLabel: string) => {
-    dispatch(setModalPopStateAction({ modalState, cardId, cardTitle, cardContent, cardDate, cardLabel }));
+  const popModal = (
+    modalState: boolean,
+    columnId: string,
+    cardId: string,
+    cardTitle: string,
+    cardContent: string,
+    cardDate: Date,
+    cardLabel: string,
+  ) => {
+    dispatch(setModalPopStateAction({ modalState, columnId, cardId, cardTitle, cardContent, cardDate, cardLabel }));
   };
   const addCard = (columnId: string, content: string) => {
     dispatch(addCardThunk(columnId, content));

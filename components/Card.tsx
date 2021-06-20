@@ -26,7 +26,7 @@ interface IProps {
   cardIndex: number;
   dragging: boolean;
   editing: { columnId: string; cardId: string };
-  pop: { modalState: boolean; cardId: string };
+  pop: { modalState: boolean; columnId: string; cardId: string; cardTitle: null; cardContent: null; cardDate: null; cardLabel: null };
   getStyles: (params: IDragParams) => string;
   preventEvent: (e: SyntheticEvent) => void;
   initialize: (e: SyntheticEvent) => void;
@@ -35,7 +35,15 @@ interface IProps {
   handleCardDrop: (e: SyntheticEvent) => void;
   handleEditCardStart: (id: string) => void;
   handleEditCardSave: (columnId: string, cardId: string, content: string) => void;
-  handlePopModal: (modalState: boolean, cardId: string, cardTitle: string, cardContent: string, cardDate: Date, cardLabel: string) => void;
+  handlePopModal: (
+    modalState: boolean,
+    columnId: string,
+    cardId: string,
+    cardTitle: string,
+    cardContent: string,
+    cardDate: Date,
+    cardLabel: string,
+  ) => void;
   deleteCard: (columnId: string, id: string) => void;
   openModal: (e: ReactClickEvent) => void;
   closeModal: (e: ReactClickEvent) => void;
@@ -73,10 +81,16 @@ const Card: React.FC<IProps> = ({
         onDrop={(e) => handleCardDrop(e)}
         // onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}
       >
-        <div className={cx('labels')} onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}>
+        <div
+          className={cx('labels')}
+          onClick={(e) => handlePopModal(pop.modalState, column.id, card.id, card.title, card.content, card.date, card.label)}
+        >
           <div className={cx(`${card.label}`)} />
         </div>
-        <div className={cx('cardTitle')} onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}>
+        <div
+          className={cx('cardTitle')}
+          onClick={(e) => handlePopModal(pop.modalState, column.id, card.id, card.title, card.content, card.date, card.label)}
+        >
           {editing.cardId === card.id ? (
             <TextInput defaultValue={card.content} handleItemSave={(newContent) => handleEditCardSave(column.id, card.id, newContent)} />
           ) : (

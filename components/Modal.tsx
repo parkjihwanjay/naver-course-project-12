@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
+import { TextInput } from '@/components';
 import styles from './Modal.module.css';
 
 const cx = classNames.bind(styles);
 
 const Modal = (props) => {
-  const { state, id, title, content, date, label, handlePopModal } = props;
+  const { state, columnId, id, title, content, date, label, handlePopModal, editModal, adminModal, editState, handleEditCardSave } = props;
 
   return state ? (
     <div className={cx('openModal', 'modal')}>
@@ -16,12 +17,16 @@ const Modal = (props) => {
           </button>
         </header>
         <main>
-          <div>{title}</div>
-          <div>{id}</div>
-          <div>{content}</div>
+          <div className={cx('title')}>{title}</div>
           <div className={cx(`${label}`)} />
-          <div>{date}</div>
-          <div>asdlfkaj;sdflajs</div>
+          <div className={cx('content')} onClick={editModal}>
+            {editState ? (
+              <TextInput defaultValue={content} handleItemSave={(newContent) => handleEditCardSave(columnId, id, newContent)} />
+            ) : (
+              <div>{content}</div>
+            )}
+          </div>
+          <div className={cx('date')}>{date}</div>
         </main>
       </section>
     </div>
