@@ -25,4 +25,5 @@
 .cardAddButton {
   display: flex;
   align-items: start;
+  margin-top: 0.5rem;
 }

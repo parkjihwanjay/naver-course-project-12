@@ -1,3 +1,7 @@
+.card {
+  margin-bottom: 0.5rem
+}
+
 .oneCard { 
     background-color: aqua;
 }

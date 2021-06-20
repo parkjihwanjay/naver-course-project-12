@@ -60,7 +60,7 @@ const Card: React.FC<IProps> = ({
   modalState,
 }) => {
   return (
-    <div>
+    <div className={cx('card')}>
       <div
         draggable
         data-id={card.id}
