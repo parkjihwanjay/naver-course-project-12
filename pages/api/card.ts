@@ -28,3 +28,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
       res.status(200);
   }
 };
+
+columnId, cardId;
+
+card의 column이랑 columId가 같은지

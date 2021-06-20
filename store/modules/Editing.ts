@@ -3,13 +3,13 @@
 import { createSlice, CreateSliceOptions, PayloadAction } from '@reduxjs/toolkit';
 import { Action } from 'typesafe-actions';
 
-interface IEditingState {
+export interface IEditingState {
   columnId: string;
   cardId: string;
 }
 
 const reducers: CreateSliceOptions['reducers'] = {
-  setColumnEditingState: (state: IEditingState, action: PayloadAction<string>) => {
+  setListEditingState: (state: IEditingState, action: PayloadAction<string>) => {
     state.columnId = action.payload;
   },
   setCardEditingState: (state: IEditingState, action: PayloadAction<string>) => {
@@ -26,9 +26,9 @@ const editingSlice = createSlice({
   reducers,
 });
 
-const { setColumnEditingState, setCardEditingState } = editingSlice.actions;
+const { setListEditingState, setCardEditingState } = editingSlice.actions;
 
-export const setColumnEditingStateAction = (payload: string): Action => setColumnEditingState(payload);
+export const setListEditingStateAction = (payload: string): Action => setListEditingState(payload);
 export const setCardEditingStateAction = (payload: string): Action => setCardEditingState(payload);
 
 export default editingSlice.reducer;

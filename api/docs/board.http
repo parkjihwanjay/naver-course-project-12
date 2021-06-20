@@ -1,0 +1,26 @@
+POST http://localhost:1000/board HTTP/1.1
+content-type: application/json
+
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImNyZWF0ZWRBdCI6IjIwMjEtMDYtMjBUMDI6MDI6MTEuOTQ3WiIsInVkcGF0ZWRBdCI6IjIwMjEtMDYtMjBUMDI6MDI6MTEuOTQ3WiIsImVtYWlsIjoiY2M2NjU2QG5hdmVyLmNvbSIsIm5hbWUiOiJGUkltaHQzMXAxVmpVWGpHY2QwX0xiMndETXV1ZnlvY1dNQ0Z6bjhxbFNVIn0sImlhdCI6MTYyNDIxMzUzNH0.gSeMXU_tcyRPW6K1a3-9cXyu4FvuV-4BS42Iakv0rNo
+
+{
+  "email" : "cc6656@naver.com",
+  "board" : {
+    "imgUrl" : "asdf",
+  }
+}
+
+# Response : newly created Card
+
+# {
+#   "title": "test",
+#   "content": "test-content",
+#   "date": "2015-03-17",
+#   "label": "red",
+#   "id": "112"
+# }
+
+###
+
+
+

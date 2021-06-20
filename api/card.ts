@@ -1,22 +1,52 @@
-import { ICardList } from '@/interfaces/ICardList';
 import { TReturn } from '@/interfaces/api';
-import { addCardPayload, ICard } from '@/interfaces/ICard';
 import fetchApi from './fetch';
 import urls from './config/urls';
+import { ICardInitial, IUpdateCard, ICardModel } from '../interfaces/ICard';
 
 const CardApi = {
-  dragCard: (list: ICardList): TReturn<ICardList> => {
-    return fetchApi<ICardList>({
-      url: urls.CARD,
-      method: 'PATCH',
-      data: { list },
+  getCardList: (): TReturn<ICardModel[]> => {
+    return fetchApi({
+      config: {
+        url: urls.CARD,
+        method: 'GET',
+      },
     });
   },
-  addCard: (params: addCardPayload): TReturn<ICard> => {
+  addCard: (listId: string, card: ICardInitial): TReturn<ICardModel> => {
     return fetchApi({
-      url: urls.CARD,
-      method: 'POST',
-      data: params,
+      config: {
+        url: urls.CARD,
+        method: 'POST',
+        data: {
+          listId,
+          card,
+        },
+      },
+    });
+  },
+  getCard: (cardId: string): TReturn<ICardModel> => {
+    return fetchApi({
+      config: {
+        url: `${urls.CARD}/${cardId}`,
+        method: 'get',
+      },
+    });
+  },
+  deleteCard: (cardId: string): TReturn<ICardModel> => {
+    return fetchApi({
+      config: {
+        url: `${urls.CARD}/${cardId}`,
+        method: 'DELETE',
+      },
+    });
+  },
+  updateCard: (cardId: string, data: IUpdateCard): TReturn<ICardModel> => {
+    return fetchApi({
+      config: {
+        url: `${urls.CARD}/${cardId}`,
+        method: 'PATCH',
+        data,
+      },
     });
   },
 };

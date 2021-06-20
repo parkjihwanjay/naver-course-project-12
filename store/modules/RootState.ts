@@ -1,9 +1,9 @@
-import { ICardList } from '@/interfaces/ICardList';
+import { IEditingState } from './Editing';
+import { IUserState } from './User';
+import { IBoard } from '../../interfaces/IBoard';
 
 export interface IRootState {
-  cardList: ICardList;
-  editing: {
-    columnId: string;
-    cardId: string;
-  };
+  board: IBoard;
+  editing: IEditingState;
+  user: IUserState;
 }

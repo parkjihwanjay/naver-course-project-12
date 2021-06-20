@@ -1,36 +1,35 @@
 import React, { useEffect } from 'react';
+import Head from 'next/head';
 import { DragNDrop } from '@/components';
 import useRedux from '@/hooks/redux';
 import {
   deleteCardAction,
-  editColumnSaveThunk,
-  addColumnThunk,
   initializeThunk,
-  dragColumnThunk,
-  dragCardThunk,
-  dragColumnAction,
-  dragCardAction,
-  deleteColumnThunk,
-  editCardSaveThunk,
   addCardThunk,
-} from '@/store/modules/CardList';
+  addListThunk,
+  deleteListThunk,
+  editListThunk,
+  editCardThunk,
+  dragThunk,
+} from '@/store/modules/Board';
 import { dragCardDTO } from '@/interfaces/api/card';
-import { ICardList, IDragColumnPayload } from '@/interfaces/ICardList';
-import { setCardEditingStateAction, setColumnEditingStateAction } from '@/store/modules/Editing';
+import { setCardEditingStateAction } from '@/store/modules/Editing';
+import { setJwtTokenAction } from '../store/modules/User';
+import { dragListAction, dragCardAction } from '../store/modules/Board';
 
 const Home: React.FC = () => {
   const { dispatch } = useRedux();
   const addColumn = (title = '') => {
-    dispatch(addColumnThunk(title, []));
+    dispatch(addListThunk(title, []));
   };
   const deleteColumn = (id: string) => {
-    dispatch(deleteColumnThunk(id));
+    dispatch(deleteListThunk(id));
   };
   const editColumnStart = (id: string) => {
     dispatch(setColumnEditingStateAction(id));
   };
   const editColumnSave = (id: string, newTitle: string) => {
-    dispatch(editColumnSaveThunk(id, newTitle));
+    dispatch(editListThunk(id, newTitle));
   };
   const addCard = (columnId: string, content: string) => {
     dispatch(addCardThunk(columnId, content));
@@ -42,22 +41,23 @@ const Home: React.FC = () => {
     dispatch(setCardEditingStateAction(id));
   };
   const editCardSave = (columnId: string, cardId: string, content: string) => {
-    dispatch(editCardSaveThunk({ columnId, cardId, content }));
+    dispatch(editCardThunk({ columnId, cardId, content }));
   };
   const handleDragCard = (payload: dragCardDTO) => {
     dispatch(dragCardAction(payload));
   };
-  const handleDropCard = (list: ICardList) => {
-    dispatch(dragCardThunk(list));
-  };
   const handleDragColumn = (payload: IDragColumnPayload) => {
-    dispatch(dragColumnAction(payload));
+    dispatch(dragListAction(payload));
+  };
+  const handleDropCard = (list: ICardList) => {
+    dispatch(dragThunk(list));
   };
   const handleDropColumn = (list: ICardList) => {
-    dispatch(dragColumnThunk(list));
+    dispatch(dragThunk(list));
   };
 
   useEffect(() => {
+    dispatch(setJwtTokenAction(localStorage.getItem('jwtToken')));
     dispatch(initializeThunk());
   }, []);
 
