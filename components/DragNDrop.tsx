@@ -6,6 +6,7 @@ import { ICard } from '@/interfaces/ICard';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 import { Column } from '@/components';
 import styles from './DragNDrop.module.css';
+import Modal from './Modal';
 
 interface IProps {
   addColumn: (title: string) => void;
@@ -140,6 +141,17 @@ const DragNDrop: React.FC<IProps> = ({
     return 'dndItem';
   };
 
+  const [modalState, setModalState] = useState(false);
+
+  const openModal = () => {
+    setModalState(true);
+  };
+
+  const closeModal = (event) => {
+    event.preventDefault();
+    setModalState(false);
+  };
+
   return (
     <div className={styles['drag-n-drop']}>
       {list.map((column, columnIndex) => (
@@ -163,6 +175,9 @@ const DragNDrop: React.FC<IProps> = ({
           deleteColumn={deleteColumn}
           addCard={addCard}
           deleteCard={deleteCard}
+          openModal={openModal}
+          closeModal={closeModal}
+          modalState={modalState}
         />
       ))}
       <input type="button" value="plus" onClick={() => addColumn('group-5')} />

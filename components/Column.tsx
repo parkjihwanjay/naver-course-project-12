@@ -1,7 +1,7 @@
 import React, { SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
 import { Card, TextInput } from '@/components';
-import { IconButton, Button } from '@material-ui/core';
+import { IconButton, Button, ValueLabelProps } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import classNames from 'classnames/bind';
 import styles from './Column.module.css';
@@ -14,6 +14,7 @@ interface IDragParams {
   columnIndex: number;
 }
 type ReactDragEvent = React.DragEvent<HTMLElement>;
+type ReactClickEvent = React.MouseEvent<HTMLElement>;
 
 interface IProps {
   column: IColumn;
@@ -34,6 +35,9 @@ interface IProps {
   deleteColumn: (id: string) => void;
   addCard: (columnId: string, content: string) => void;
   deleteCard: (columnId: string, id: string) => void;
+  openModal: (e: ReactClickEvent) => void;
+  closeModal: (e: ReactClickEvent) => void;
+  modalState: boolean;
 }
 
 const Column: React.FC<IProps> = ({
@@ -55,6 +59,9 @@ const Column: React.FC<IProps> = ({
   deleteColumn,
   addCard,
   deleteCard,
+  openModal,
+  closeModal,
+  modalState,
 }) => {
   return (
     <div
@@ -99,6 +106,9 @@ const Column: React.FC<IProps> = ({
           handleEditCardStart={handleEditCardStart}
           handleEditCardSave={handleEditCardSave}
           deleteCard={deleteCard}
+          openModal={openModal}
+          closeModal={closeModal}
+          modalState={modalState}
         />
       ))}
       <div className={cx('cardAddButton')}>
