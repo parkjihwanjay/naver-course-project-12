@@ -6,4 +6,12 @@ export interface IRootState {
     columnId: string;
     cardId: string;
   };
+  pop: {
+    modalState: boolean;
+    cardId: string;
+    cardTitle: string;
+    cardContent: string;
+    cardDate: Date;
+    cardLabel: string;
+  };
 }

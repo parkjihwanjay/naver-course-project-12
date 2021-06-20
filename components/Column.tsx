@@ -14,13 +14,13 @@ interface IDragParams {
   columnIndex: number;
 }
 type ReactDragEvent = React.DragEvent<HTMLElement>;
-type ReactClickEvent = React.MouseEvent<HTMLElement>;
 
 interface IProps {
   column: IColumn;
   columnIndex: number;
   dragging: boolean;
   editing: { columnId: string; cardId: string };
+  pop: { modalState: boolean; cardId: string };
   getStyles: (params: IDragParams) => string;
   preventEvent: (e: SyntheticEvent) => void;
   initialize: (e: SyntheticEvent) => void;
@@ -30,14 +30,12 @@ interface IProps {
   handleCardDrop: (e: SyntheticEvent) => void;
   handleEditColumnStart: (id: string) => void;
   handleEditColumnSave: (id: string, newTitle: string) => void;
+  handlePopModal: (modalState: boolean, cardId: string, cardTitle: string, cardContent: string, cardDate: Date, cardLabel: string) => void;
   handleEditCardStart: (id: string) => void;
   handleEditCardSave: (columnId: string, cardId: string, content: string) => void;
   deleteColumn: (id: string) => void;
   addCard: (columnId: string, content: string) => void;
   deleteCard: (columnId: string, id: string) => void;
-  openModal: (e: ReactClickEvent) => void;
-  closeModal: (e: ReactClickEvent) => void;
-  modalState: boolean;
 }
 
 const Column: React.FC<IProps> = ({
@@ -45,6 +43,7 @@ const Column: React.FC<IProps> = ({
   columnIndex,
   dragging,
   editing,
+  pop,
   getStyles,
   preventEvent,
   initialize,
@@ -56,12 +55,10 @@ const Column: React.FC<IProps> = ({
   handleEditColumnSave,
   handleEditCardStart,
   handleEditCardSave,
+  handlePopModal,
   deleteColumn,
   addCard,
   deleteCard,
-  openModal,
-  closeModal,
-  modalState,
 }) => {
   return (
     <div
@@ -97,18 +94,17 @@ const Column: React.FC<IProps> = ({
           cardIndex={cardIndex}
           dragging={dragging}
           editing={editing}
+          pop={pop}
           getStyles={getStyles}
           preventEvent={preventEvent}
           initialize={initialize}
           handleDragStart={handleDragStart}
           handleDragEnter={handleDragEnter}
           handleCardDrop={handleCardDrop}
+          handlePopModal={handlePopModal}
           handleEditCardStart={handleEditCardStart}
           handleEditCardSave={handleEditCardSave}
           deleteCard={deleteCard}
-          openModal={openModal}
-          closeModal={closeModal}
-          modalState={modalState}
         />
       ))}
       <div className={cx('cardAddButton')}>

@@ -6,8 +6,8 @@ import classNames from 'classnames/bind';
 import { IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { popReducer } from '@/store/modules';
 import styles from './Card.module.css';
-import Modal from './Modal';
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +26,7 @@ interface IProps {
   cardIndex: number;
   dragging: boolean;
   editing: { columnId: string; cardId: string };
+  pop: { modalState: boolean; cardId: string };
   getStyles: (params: IDragParams) => string;
   preventEvent: (e: SyntheticEvent) => void;
   initialize: (e: SyntheticEvent) => void;
@@ -34,6 +35,7 @@ interface IProps {
   handleCardDrop: (e: SyntheticEvent) => void;
   handleEditCardStart: (id: string) => void;
   handleEditCardSave: (columnId: string, cardId: string, content: string) => void;
+  handlePopModal: (modalState: boolean, cardId: string, cardTitle: string, cardContent: string, cardDate: Date, cardLabel: string) => void;
   deleteCard: (columnId: string, id: string) => void;
   openModal: (e: ReactClickEvent) => void;
   closeModal: (e: ReactClickEvent) => void;
@@ -46,6 +48,7 @@ const Card: React.FC<IProps> = ({
   cardIndex,
   dragging,
   editing,
+  pop,
   getStyles,
   preventEvent,
   initialize,
@@ -54,10 +57,8 @@ const Card: React.FC<IProps> = ({
   handleCardDrop,
   handleEditCardStart,
   handleEditCardSave,
+  handlePopModal,
   deleteCard,
-  openModal,
-  closeModal,
-  modalState,
 }) => {
   return (
     <div className={cx('card')}>
@@ -70,7 +71,7 @@ const Card: React.FC<IProps> = ({
         onDragOver={preventEvent}
         onDragEnd={initialize}
         onDrop={(e) => handleCardDrop(e)}
-        onClick={openModal}
+        onClick={(e) => handlePopModal(pop.modalState, card.id, card.title, card.content, card.date, card.label)}
       >
         <div className={cx('labels')}>
           <div className={cx('label-red')} />
@@ -93,7 +94,6 @@ const Card: React.FC<IProps> = ({
           </IconButton>
         </div>
       </div>
-      <Modal data={card.content} state={modalState} closeModal={closeModal} />
     </div>
   );
 };

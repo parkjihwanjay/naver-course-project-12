@@ -17,6 +17,7 @@ import {
 import { dragCardDTO } from '@/interfaces/api/card';
 import { ICardList, IDragColumnPayload } from '@/interfaces/ICardList';
 import { setCardEditingStateAction, setColumnEditingStateAction } from '@/store/modules/Editing';
+import { setModalPopStateAction } from '@/store/modules/PopModal';
 
 const Home: React.FC = () => {
   const { dispatch } = useRedux();
@@ -31,6 +32,9 @@ const Home: React.FC = () => {
   };
   const editColumnSave = (id: string, newTitle: string) => {
     dispatch(editColumnSaveThunk(id, newTitle));
+  };
+  const popModal = (modalState: boolean, cardId: string, cardTitle: string, cardContent: string, cardDate: Date, cardLabel: string) => {
+    dispatch(setModalPopStateAction({ modalState, cardId, cardTitle, cardContent, cardDate, cardLabel }));
   };
   const addCard = (columnId: string, content: string) => {
     dispatch(addCardThunk(columnId, content));
@@ -77,6 +81,7 @@ const Home: React.FC = () => {
           handleDragColumn={handleDragColumn}
           handleDropColumn={handleDropColumn}
           handleDropCard={handleDropCard}
+          popModal={popModal}
         />
       </header>
     </div>

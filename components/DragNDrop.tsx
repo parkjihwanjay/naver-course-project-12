@@ -16,6 +16,7 @@ interface IProps {
   editCardSave: (columnId: string, cardId: string, content: string) => void;
   editColumnStart: (id: string) => void;
   editColumnSave: (id: string, newTitle: string) => void;
+  popModal: (modalState: boolean, cardId: string, cardTitle: string, cardContent: string, cardDate: Date, cardLabel: string) => void;
   deleteColumn: (id: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
@@ -51,6 +52,7 @@ const DragNDrop: React.FC<IProps> = ({
   deleteColumn,
   editColumnStart,
   editColumnSave,
+  popModal,
   addCard,
   deleteCard,
   editCardStart,
@@ -63,6 +65,7 @@ const DragNDrop: React.FC<IProps> = ({
   const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
   const editing = useAppSelector((state) => state.editing);
+  const pop = useAppSelector((state) => state.pop);
   const [dragging, setDragging] = useState(false);
 
   const dragItem = useRef<IDragParams>();
@@ -118,6 +121,11 @@ const DragNDrop: React.FC<IProps> = ({
   const handleEditColumnSave = (id: string, newTitle: string): void => {
     editColumnSave(id, newTitle);
   };
+  const handlePopModal = (modalState: boolean, cardId: string, cardTitle: string, cardContent: string, cardDate: Date, cardLabel: string): void => {
+    popModal(modalState, cardId, cardTitle, cardContent, cardDate, cardLabel);
+    console.log(pop.modalState);
+    console.log(pop.cardId);
+  };
   const handleEditCardStart = (id: string): void => {
     editCardStart(id);
   };
@@ -141,17 +149,6 @@ const DragNDrop: React.FC<IProps> = ({
     return 'dndItem';
   };
 
-  const [modalState, setModalState] = useState(false);
-
-  const openModal = () => {
-    setModalState(true);
-  };
-
-  const closeModal = (event) => {
-    event.preventDefault();
-    setModalState(false);
-  };
-
   return (
     <div className={styles['drag-n-drop']}>
       {list.map((column, columnIndex) => (
@@ -161,6 +158,7 @@ const DragNDrop: React.FC<IProps> = ({
           columnIndex={columnIndex}
           dragging={dragging}
           editing={editing}
+          pop={pop}
           getStyles={getStyles}
           preventEvent={preventEvent}
           initialize={initialize}
@@ -170,17 +168,24 @@ const DragNDrop: React.FC<IProps> = ({
           handleCardDrop={handleCardDrop}
           handleEditColumnStart={handleEditColumnStart}
           handleEditColumnSave={handleEditColumnSave}
+          handlePopModal={handlePopModal}
           handleEditCardStart={handleEditCardStart}
           handleEditCardSave={handleEditCardSave}
           deleteColumn={deleteColumn}
           addCard={addCard}
           deleteCard={deleteCard}
-          openModal={openModal}
-          closeModal={closeModal}
-          modalState={modalState}
         />
       ))}
       <input type="button" value="plus" onClick={() => addColumn('group-5')} />
+      <Modal
+        state={pop.modalState}
+        id={pop.cardId}
+        title={pop.cardTitle}
+        content={pop.cardContent}
+        date={pop.cardDate}
+        label={pop.cardLabel}
+        handlePopModal={handlePopModal}
+      />
     </div>
   );
 };
