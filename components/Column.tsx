@@ -1,6 +1,8 @@
 import React, { SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
 import { Card, TextInput } from '@/components';
+import { IconButton, Button } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import classNames from 'classnames/bind';
 import styles from './Column.module.css';
 
@@ -64,14 +66,21 @@ const Column: React.FC<IProps> = ({
       onDragEnd={initialize}
       onDrop={handleDrop}
     >
-      <div>
-        {editing.columnId === column.id ? (
-          <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
-        ) : (
-          <div onClick={(e) => handleEditColumnStart(column.id)}>{column.title}</div>
-        )}
-        <input type="button" value="delete" onClick={() => deleteColumn(column.id)} />
+      <div className={cx('header')}>
+        <div className={cx('columnTitle')}>
+          {editing.columnId === column.id ? (
+            <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
+          ) : (
+            <div onClick={(e) => handleEditColumnStart(column.id)}>{column.title}</div>
+          )}
+        </div>
+        <div className={cx('icons')}>
+          <IconButton aria-label="delete" size="small" onClick={() => deleteColumn(column.id)}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
       </div>
+
       {column.items.map((card, cardIndex) => (
         <Card
           key={card.id}
@@ -92,7 +101,11 @@ const Column: React.FC<IProps> = ({
           deleteCard={deleteCard}
         />
       ))}
-      <input type="button" value="cardadd" onClick={() => addCard(column.id, 'new')} />
+      <div className={cx('cardAddButton')}>
+        <Button variant="contained" size="small" onClick={() => addCard(column.id, 'new')}>
+          Add a card
+        </Button>
+      </div>
     </div>
   );
 };

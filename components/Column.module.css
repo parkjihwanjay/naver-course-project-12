@@ -1,7 +1,28 @@
-
-
 .dndGroup {
     background-color: #49505e;
     border-radius: 5px;
     padding: 0.5rem;
   }
+
+.header {
+  display: flex;
+  align-items: start;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.columnTitle {
+    text-align: left;
+    white-space: normal;
+}
+
+.icons {
+  display: flex;
+  padding-left: 7px;
+  padding-bottom: 10px;
+}
+
+.cardAddButton {
+  display: flex;
+  align-items: start;
+}
