@@ -11,6 +11,7 @@ import { Action, createSlice, CreateSliceOptions, PayloadAction, ThunkAction } f
 import { ActionType } from 'typesafe-actions';
 import { deleteById, findById } from '@/utils/handleArray';
 
+import { CardMedia } from '@material-ui/core';
 import { IRootState } from './RootState';
 import { setColumnEditingStateAction, setCardEditingStateAction } from './Editing';
 
@@ -43,6 +44,7 @@ interface IEditCardSavePayload {
   lable: string;
   date: Date;
 }
+
 const reducers: CreateSliceOptions['reducers'] = {
   initialize: (state: ICardList, action: PayloadAction<ICardList>) => {
     return action.payload;
@@ -78,7 +80,7 @@ const reducers: CreateSliceOptions['reducers'] = {
     const { cardId, columnId, title, content, lable, date } = action.payload;
     const editColumn = findById<IColumn>(state, columnId).item;
     const editCard = findById<ICard>(editColumn.items, cardId).item;
-    updateValues<ICard>(editCard, { title, content, lable, date });
+    updateValues<ICard>(editCard, { cardId, title, content, lable, date });
   },
   dragCard: (state: ICardList, action: PayloadAction<IDragCardPayload>) => {
     const { columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex } = action.payload;
@@ -90,6 +92,9 @@ const reducers: CreateSliceOptions['reducers'] = {
     const targetColumn = findById<IColumn>(state, targetColumnId);
     const dragColumn = findById<IColumn>(state, dragColumnId);
     swapItem<IColumn>(state, targetColumn.index, dragColumn.index);
+  },
+  popModal: (state: ICardList, action: PayloadAction<IPopModalPayload>) => {
+    return action.payload;
   },
 };
 
@@ -112,6 +117,7 @@ export const editColumnSaveAction = (payload: IEditColumnSavePayload): Action =>
 export const editCardSaveAction = (payload: IEditCardSavePayload): Action => editCardSave(payload);
 export const dragCardAction = (payload: IDragCardPayload): Action => dragCard(payload);
 export const dragColumnAction = (payload: IDragColumnPayload): Action => dragColumn(payload);
+export const popModalAction = (payload: IPopModalPayload): Action => popModal(payload);
 
 export const addColumnThunk =
   (title: string, items: ICardItems): ThunkAction<void, IRootState, null, ActionType<typeof addColumnAction>> =>

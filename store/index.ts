@@ -2,12 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import { reduxBatch } from '@manaflair/redux-batch';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import logger from 'redux-logger';
-import { cardListReducer, editingReducer } from './modules';
+import { cardListReducer, editingReducer, popReducer } from './modules';
 
 const env = process.env.NODE_ENV;
 const reducer = {
   cardList: cardListReducer,
   editing: editingReducer,
+  pop: popReducer,
 };
 
 const middleware =

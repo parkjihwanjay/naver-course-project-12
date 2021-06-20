@@ -6,6 +6,7 @@ import { ICard } from '@/interfaces/ICard';
 import { ICardList, IDragCardPayload, IDragColumnPayload } from '@/interfaces/ICardList';
 import { Column } from '@/components';
 import styles from './DragNDrop.module.css';
+import Modal from './Modal';
 
 interface IProps {
   addColumn: (title: string) => void;
@@ -15,6 +16,15 @@ interface IProps {
   editCardSave: (columnId: string, cardId: string, content: string) => void;
   editColumnStart: (id: string) => void;
   editColumnSave: (id: string, newTitle: string) => void;
+  popModal: (
+    modalState: boolean,
+    columnId: string,
+    cardId: string,
+    cardTitle: string,
+    cardContent: string,
+    cardDate: Date,
+    cardLabel: string,
+  ) => void;
   deleteColumn: (id: string) => void;
   handleDragCard: (payload: IDragCardPayload) => void;
   handleDragColumn: (payload: IDragColumnPayload) => void;
@@ -50,6 +60,7 @@ const DragNDrop: React.FC<IProps> = ({
   deleteColumn,
   editColumnStart,
   editColumnSave,
+  popModal,
   addCard,
   deleteCard,
   editCardStart,
@@ -62,6 +73,7 @@ const DragNDrop: React.FC<IProps> = ({
   const { useAppSelector } = useRedux();
   const list = useAppSelector((state) => state.cardList);
   const editing = useAppSelector((state) => state.editing);
+  const pop = useAppSelector((state) => state.pop);
   const [dragging, setDragging] = useState(false);
 
   const dragItem = useRef<IDragParams>();
@@ -117,6 +129,17 @@ const DragNDrop: React.FC<IProps> = ({
   const handleEditColumnSave = (id: string, newTitle: string): void => {
     editColumnSave(id, newTitle);
   };
+  const handlePopModal = (
+    modalState: boolean,
+    columnId: string,
+    cardId: string,
+    cardTitle: string,
+    cardContent: string,
+    cardDate: Date,
+    cardLabel: string,
+  ): void => {
+    popModal(modalState, columnId, cardId, cardTitle, cardContent, cardDate, cardLabel);
+  };
   const handleEditCardStart = (id: string): void => {
     editCardStart(id);
   };
@@ -140,6 +163,16 @@ const DragNDrop: React.FC<IProps> = ({
     return 'dndItem';
   };
 
+  const [editState, setEditState] = useState(false);
+
+  const editModal = () => {
+    setEditState(true);
+  };
+
+  const adminModal = () => {
+    setEditState(false);
+  };
+
   return (
     <div className={styles['drag-n-drop']}>
       {list.map((column, columnIndex) => (
@@ -149,6 +182,7 @@ const DragNDrop: React.FC<IProps> = ({
           columnIndex={columnIndex}
           dragging={dragging}
           editing={editing}
+          pop={pop}
           getStyles={getStyles}
           preventEvent={preventEvent}
           initialize={initialize}
@@ -158,6 +192,7 @@ const DragNDrop: React.FC<IProps> = ({
           handleCardDrop={handleCardDrop}
           handleEditColumnStart={handleEditColumnStart}
           handleEditColumnSave={handleEditColumnSave}
+          handlePopModal={handlePopModal}
           handleEditCardStart={handleEditCardStart}
           handleEditCardSave={handleEditCardSave}
           deleteColumn={deleteColumn}
@@ -166,6 +201,20 @@ const DragNDrop: React.FC<IProps> = ({
         />
       ))}
       <input type="button" value="plus" onClick={() => addColumn('group-5')} />
+      <Modal
+        state={pop.modalState}
+        columnId={pop.columnId}
+        id={pop.cardId}
+        title={pop.cardTitle}
+        content={pop.cardContent}
+        date={pop.cardDate}
+        label={pop.cardLabel}
+        handlePopModal={handlePopModal}
+        editModal={editModal}
+        adminModal={adminModal}
+        editState={editState}
+        handleEditCardSave={handleEditCardSave}
+      />
     </div>
   );
 };

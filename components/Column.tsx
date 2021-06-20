@@ -1,6 +1,8 @@
 import React, { SyntheticEvent } from 'react';
 import { IColumn } from '@/interfaces/IColumn';
 import { Card, TextInput } from '@/components';
+import { IconButton, Button, ValueLabelProps } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import classNames from 'classnames/bind';
 import styles from './Column.module.css';
 
@@ -18,6 +20,7 @@ interface IProps {
   columnIndex: number;
   dragging: boolean;
   editing: { columnId: string; cardId: string };
+  pop: { modalState: boolean; columnId: string; cardId: string; cardTitle: null; cardContent: null; cardDate: null; cardLabel: null };
   getStyles: (params: IDragParams) => string;
   preventEvent: (e: SyntheticEvent) => void;
   initialize: (e: SyntheticEvent) => void;
@@ -27,6 +30,15 @@ interface IProps {
   handleCardDrop: (e: SyntheticEvent) => void;
   handleEditColumnStart: (id: string) => void;
   handleEditColumnSave: (id: string, newTitle: string) => void;
+  handlePopModal: (
+    modalState: boolean,
+    columnId: string,
+    cardId: string,
+    cardTitle: string,
+    cardContent: string,
+    cardDate: Date,
+    cardLabel: string,
+  ) => void;
   handleEditCardStart: (id: string) => void;
   handleEditCardSave: (columnId: string, cardId: string, content: string) => void;
   deleteColumn: (id: string) => void;
@@ -39,6 +51,7 @@ const Column: React.FC<IProps> = ({
   columnIndex,
   dragging,
   editing,
+  pop,
   getStyles,
   preventEvent,
   initialize,
@@ -50,6 +63,7 @@ const Column: React.FC<IProps> = ({
   handleEditColumnSave,
   handleEditCardStart,
   handleEditCardSave,
+  handlePopModal,
   deleteColumn,
   addCard,
   deleteCard,
@@ -64,14 +78,21 @@ const Column: React.FC<IProps> = ({
       onDragEnd={initialize}
       onDrop={handleDrop}
     >
-      <div>
-        {editing.columnId === column.id ? (
-          <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
-        ) : (
-          <div onClick={(e) => handleEditColumnStart(column.id)}>{column.title}</div>
-        )}
-        <input type="button" value="delete" onClick={() => deleteColumn(column.id)} />
+      <div className={cx('header')}>
+        <div className={cx('columnTitle')}>
+          {editing.columnId === column.id ? (
+            <TextInput defaultValue={column.title} handleItemSave={(newTitle) => handleEditColumnSave(column.id, newTitle)} />
+          ) : (
+            <div onClick={(e) => handleEditColumnStart(column.id)}>{column.title}</div>
+          )}
+        </div>
+        <div className={cx('icons')}>
+          <IconButton aria-label="delete" size="small" onClick={() => deleteColumn(column.id)}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
       </div>
+
       {column.items.map((card, cardIndex) => (
         <Card
           key={card.id}
@@ -81,18 +102,24 @@ const Column: React.FC<IProps> = ({
           cardIndex={cardIndex}
           dragging={dragging}
           editing={editing}
+          pop={pop}
           getStyles={getStyles}
           preventEvent={preventEvent}
           initialize={initialize}
           handleDragStart={handleDragStart}
           handleDragEnter={handleDragEnter}
           handleCardDrop={handleCardDrop}
+          handlePopModal={handlePopModal}
           handleEditCardStart={handleEditCardStart}
           handleEditCardSave={handleEditCardSave}
           deleteCard={deleteCard}
         />
       ))}
-      <input type="button" value="cardadd" onClick={() => addCard(column.id, 'new')} />
+      <div className={cx('cardAddButton')}>
+        <Button variant="contained" size="small" onClick={() => addCard(column.id, 'new')}>
+          Add a card
+        </Button>
+      </div>
     </div>
   );
 };

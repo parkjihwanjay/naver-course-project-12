@@ -1,3 +1,7 @@
+.card {
+  margin-bottom: 0.5rem
+}
+
 .oneCard { 
     background-color: aqua;
 }
@@ -19,7 +23,7 @@
 }
 
 
-.label-red {
+.red {
     width: 40px;
     height: 10px;
     background-color: red;
@@ -29,7 +33,7 @@
     
 }
 
-.label-blue {
+.blue {
     width: 40px;
     height: 10px;
     background-color: blue;
@@ -38,7 +42,7 @@
     border-radius: 5px;
 }
 
-.label-yellow {
+.yellow {
     width: 40px;
     height: 10px;
     background-color: yellow;
