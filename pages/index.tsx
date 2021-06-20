@@ -13,7 +13,7 @@ import {
   dragThunk,
 } from '@/store/modules/Board';
 import { dragCardDTO } from '@/interfaces/api/card';
-import { setCardEditingStateAction } from '@/store/modules/Editing';
+import { setModalPopStateAction } from '@/store/modules/PopModal';
 import { setJwtTokenAction } from '../store/modules/User';
 import { dragListAction, dragCardAction } from '../store/modules/Board';
 
@@ -30,6 +30,17 @@ const Home: React.FC = () => {
   };
   const editColumnSave = (id: string, newTitle: string) => {
     dispatch(editListThunk(id, newTitle));
+  };
+  const popModal = (
+    modalState: boolean,
+    columnId: string,
+    cardId: string,
+    cardTitle: string,
+    cardContent: string,
+    cardDate: Date,
+    cardLabel: string,
+  ) => {
+    dispatch(setModalPopStateAction({ modalState, columnId, cardId, cardTitle, cardContent, cardDate, cardLabel }));
   };
   const addCard = (columnId: string, content: string) => {
     dispatch(addCardThunk(columnId, content));
@@ -77,6 +88,7 @@ const Home: React.FC = () => {
           handleDragColumn={handleDragColumn}
           handleDropColumn={handleDropColumn}
           handleDropCard={handleDropCard}
+          popModal={popModal}
         />
       </header>
     </div>

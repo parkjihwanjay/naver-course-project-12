@@ -4,6 +4,18 @@ import { IBoard } from '../../interfaces/IBoard';
 
 export interface IRootState {
   board: IBoard;
-  editing: IEditingState;
   user: IUserState;
+  editing: {
+    columnId: string;
+    cardId: string;
+  };
+  pop: {
+    modalState: boolean;
+    columnId: string;
+    cardId: string;
+    cardTitle: string;
+    cardContent: string;
+    cardDate: Date;
+    cardLabel: string;
+  };
 }
