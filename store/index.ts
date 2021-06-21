@@ -2,11 +2,11 @@ import { configureStore } from '@reduxjs/toolkit';
 import { reduxBatch } from '@manaflair/redux-batch';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import logger from 'redux-logger';
-import { cardListReducer, editingReducer, userReducer, popReducer } from './modules';
+import { boardReducer, editingReducer, userReducer, popReducer } from './modules';
 
 const env = process.env.NODE_ENV;
 const reducer = {
-  cardList: cardListReducer,
+  board: boardReducer,
   editing: editingReducer,
   user: userReducer,
   pop: popReducer,

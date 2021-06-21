@@ -29,6 +29,6 @@ const editingSlice = createSlice({
 const { setListEditingState, setCardEditingState } = editingSlice.actions;
 
 export const setListEditingStateAction = (payload: string): Action => setListEditingState(payload);
-export const setCardEditingStateAction = (payload: string): Action => setCardEditingState(payload);
+export const setCardEditingStateAction = (cardId: string): Action => setCardEditingState(cardId);
 
 export default editingSlice.reducer;

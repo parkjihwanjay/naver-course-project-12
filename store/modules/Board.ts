@@ -35,9 +35,6 @@ const reducers: CreateSliceOptions['reducers'] = {
     const deleteListId = action.payload;
     deleteById<IList>(state.lists, deleteListId);
   },
-  setCardList: (state: IBoard, action: PayloadAction<IList[]>) => {
-    state.lists = action.payload;
-  },
   deleteCard: (state: IBoard, action: PayloadAction<{ listId: string; cardId: string }>) => {
     const { listId, cardId } = action.payload;
     const list = findById(state.lists, listId).item;
@@ -60,7 +57,7 @@ const reducers: CreateSliceOptions['reducers'] = {
   dragCard: (state: IBoard, action: PayloadAction<IDragCardPayload>) => {
     const { listIndex, cardIndex, dragListIndex, dragCardIndex } = action.payload;
     const deletedCard = state.lists[dragListIndex].cards.splice(dragCardIndex, 1)[0];
-    state[listIndex].items.splice(cardIndex, 0, deletedCard);
+    state.lists[listIndex].cards.splice(cardIndex, 0, deletedCard);
   },
   dragList: (state: IBoard, action: PayloadAction<IDragListPayload>) => {
     const { targetListId, dragListId } = action.payload;
@@ -72,21 +69,29 @@ const reducers: CreateSliceOptions['reducers'] = {
     const { imgUrl, lists } = action.payload;
     updateValues(state, { imgUrl, lists });
   },
+  // popModal: (state: ICardList, action: PayloadAction<IPopModalPayload>) => {
+  //   return action.payload;
+  // },
 };
 
-const cardListSlice = createSlice({
-  name: 'cardList',
-  initialState: [],
+const boardSlice = createSlice({
+  name: 'board',
+  initialState: {
+    id: '',
+    imgUrl: '',
+    lists: [],
+    labels: [],
+  },
   reducers,
 });
 
-const { addList, deleteList, updateBoard, addCard, deleteCard, editCard, initialize, dragCard, dragList, editList } = cardListSlice.actions;
+const { addList, deleteList, updateBoard, addCard, deleteCard, editCard, initialize, dragCard, dragList, editList } = boardSlice.actions;
 
 export const initializeAction = (payload: IBoardModel): Action => initialize(payload);
 export const addListAction = (payload: IListModel): Action => addList(payload);
 export const addCardAction = (listId: string, card: ICardModel): Action => addCard({ listId, card });
 export const deleteListAction = (listId: string): Action => deleteList(listId);
-export const deleteCardAction = (listId: string, cardId: string): Action => deleteCard(cardId);
+export const deleteCardAction = (listId: string, cardId: string): Action => deleteCard({ listId, cardId });
 export const editCardAction = (payload: ICardModel): Action => editCard(payload);
 export const editListAction = (payload: IListModel): Action => editList(payload);
 export const dragCardAction = (payload: IDragCardPayload): Action => dragCard(payload);
@@ -114,13 +119,13 @@ export const deleteListThunk =
   (listId: string): ThunkAction<void, IRootState, null, ActionType<typeof deleteListAction>> =>
   async (dispatch) => {
     const [data, error] = await ListApi.deleteList(listId);
-    dispatch(deleteListAction(data.id));
+    dispatch(deleteListAction(listId));
   };
-export const deleteCardThink =
-  (cardId: string): ThunkAction<void, IRootState, null, ActionType<typeof deleteCardAction>> =>
+export const deleteCardThunk =
+  (listId: string, cardId: string): ThunkAction<void, IRootState, null, ActionType<typeof deleteCardAction>> =>
   async (dispatch) => {
     const [data, error] = await CardApi.deleteCard(cardId);
-    dispatch(deleteCardAction(data.list.id, data.id));
+    dispatch(deleteCardAction(listId, cardId));
   };
 export const editCardThunk = (cardId: string, data: IUpdateCard) => async (dispatch) => {
   const [editedCard, error] = await CardApi.updateCard(cardId, data);
@@ -134,12 +139,11 @@ export const editListThunk = (listId: string, data: IUpdateList) => async (dispa
   dispatch(setListEditingStateAction(null));
 };
 
-export const dragThunk =
-  (list: IList[]): ThunkAction<void, IRootState, null, ActionType<typeof updateBoardAction>> =>
-  async (dispatch, getState) => {
-    const { board } = getState();
-    const [data, error] = await BoardApi.updateBoard(board.id, { lists: list });
-    dispatch(updateBoardAction(data));
-  };
+export const dragThunk = (): ThunkAction<void, IRootState, null, ActionType<typeof updateBoardAction>> => async (dispatch, getState) => {
+  const { board } = getState();
+  const { lists } = board;
+  const [data, error] = await BoardApi.updateBoard(board.id, { lists });
+  // dispatch(updateBoardAction(data));
+};
 
-export default cardListSlice.reducer;
+export default boardSlice.reducer;

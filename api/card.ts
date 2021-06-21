@@ -32,7 +32,7 @@ const CardApi = {
       },
     });
   },
-  deleteCard: (cardId: string): TReturn<ICardModel> => {
+  deleteCard: (cardId: string): TReturn<string> => {
     return fetchApi({
       config: {
         url: `${urls.CARD}/${cardId}`,

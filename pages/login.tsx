@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import UserApi from '@/api/user';
+import useRedux from '@/hooks/redux';
+import { setJwtTokenAction } from '@/store/modules/User';
 
 const getLoginWithNaverId = () => {
   return new window.naver.LoginWithNaverId({
@@ -15,6 +17,7 @@ const getLoginWithNaverId = () => {
 
 const Login: React.FC = () => {
   const router = useRouter();
+  const { dispatch } = useRedux();
   const [isWindow, setIsWindow] = useState(false);
   const [naverLogin, setNaverLogin] = useState(null);
 
@@ -40,6 +43,7 @@ const Login: React.FC = () => {
 
     const { jwtToken } = result;
     localStorage.setItem('jwtToken', jwtToken);
+    dispatch(setJwtTokenAction(jwtToken));
     return router.push('/');
   };
 
