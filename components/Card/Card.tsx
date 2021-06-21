@@ -55,17 +55,17 @@ const Card: React.FC<IProps> = ({ list, listIndex, card, cardIndex, dragging, ge
         <div className={cx('cardTitle')}>
           {editing.cardId === card.id ? (
             <TextInput
-              defaultValue={card.content}
-              handleItemSave={(newContent) =>
+              defaultValue={card.title}
+              handleItemSave={(newTitle) =>
                 dispatch(
-                  editCardThunk(list.id, card.id, {
-                    content: newContent,
+                  editCardThunk(card.id, {
+                    title: newTitle,
                   }),
                 )
               }
             />
           ) : (
-            <div>{card.content}</div>
+            <div>{card.title}</div>
           )}
         </div>
         <div className={cx('icons')}>

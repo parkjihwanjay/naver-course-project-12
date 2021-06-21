@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface IProps {
   defaultValue: string;
-  handleItemSave: (newContent: string) => void;
+  handleItemSave: (newValue: string) => void;
 }
 const TextInput: React.FC<IProps> = ({ defaultValue, handleItemSave }) => {
   const [value, setValue] = useState<string>(defaultValue);
