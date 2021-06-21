@@ -46,10 +46,10 @@ const reducers: CreateSliceOptions['reducers'] = {
     listToEdit.item.title = title;
     listToEdit.item.cards = cards;
   },
-  editCard: (state: IBoard, action: PayloadAction<ICardModel>) => {
-    const { id, list, title, content, labels, date } = action.payload;
-    const result = findById(state.lists, list.id);
-    const editList = result.item;
+  editCard: (state: IBoard, action: PayloadAction<{ listId: string; editedCard: ICardModel }>) => {
+    const { id, list, title, content, labels, date } = action.payload.editedCard;
+    const { listId } = action.payload;
+    const editList = findById(state.lists, listId).item;
     const { item } = findById(editList.cards, id);
     const card = item;
     updateValues(card, { title, content, labels, date });
@@ -92,7 +92,7 @@ export const addListAction = (payload: IListModel): Action => addList(payload);
 export const addCardAction = (listId: string, card: ICardModel): Action => addCard({ listId, card });
 export const deleteListAction = (listId: string): Action => deleteList(listId);
 export const deleteCardAction = (listId: string, cardId: string): Action => deleteCard({ listId, cardId });
-export const editCardAction = (payload: ICardModel): Action => editCard(payload);
+export const editCardAction = (listId: string, editedCard: ICardModel): Action => editCard({ listId, editedCard });
 export const editListAction = (payload: IListModel): Action => editList(payload);
 export const dragCardAction = (payload: IDragCardPayload): Action => dragCard(payload);
 export const dragListAction = (payload: IDragListPayload): Action => dragList(payload);
@@ -127,9 +127,9 @@ export const deleteCardThunk =
     const [data, error] = await CardApi.deleteCard(cardId);
     dispatch(deleteCardAction(listId, cardId));
   };
-export const editCardThunk = (cardId: string, data: IUpdateCard) => async (dispatch) => {
+export const editCardThunk = (listId: string, cardId: string, data: IUpdateCard) => async (dispatch) => {
   const [editedCard, error] = await CardApi.updateCard(cardId, data);
-  dispatch(editCardAction(editedCard));
+  dispatch(editCardAction(listId, editedCard));
   dispatch(setCardEditingStateAction(null));
 };
 

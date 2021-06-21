@@ -2,45 +2,44 @@
 /* eslint-disable no-return-assign */
 import { createSlice, CreateSliceOptions, PayloadAction } from '@reduxjs/toolkit';
 import { Action } from 'typesafe-actions';
+import { ICard } from '../../interfaces/ICard';
 
-interface IPopState {
+export interface IPopState {
   modalState: boolean;
-  columnId: string;
-  cardId: string;
-  cardTitle: string;
-  cardContent: string;
-  cardDate: Date;
-  cardLabel: string;
+  card: ICard;
 }
 
+const cardInital = {
+  id: '',
+  title: '',
+  content: '',
+  labels: [],
+  date: new Date().toDateString(),
+};
+
 const reducers: CreateSliceOptions['reducers'] = {
-  setModalPopState: (state: IPopState, action: PayloadAction<IPopState>) => {
-    state.modalState = !action.payload.modalState;
-    state.columnId = action.payload.columnId;
-    state.cardId = action.payload.cardId;
-    state.cardTitle = action.payload.cardTitle;
-    state.cardContent = action.payload.cardContent;
-    state.cardDate = action.payload.cardDate;
-    state.cardLabel = action.payload.cardLabel;
+  onModal: (state: IPopState, action: PayloadAction<ICard>) => {
+    state.modalState = true;
+    state.card = action.payload;
+  },
+  offModal: (state: IPopState) => {
+    state.modalState = false;
+    state.card = cardInital;
   },
 };
 
 const popSlice = createSlice({
   name: 'pop',
   initialState: {
+    card: cardInital,
     modalState: false,
-    columnId: null,
-    cardId: null,
-    cardTitle: null,
-    cardContent: null,
-    cardDate: null,
-    cardLabel: null,
   },
   reducers,
 });
 
-const { setModalPopState } = popSlice.actions;
+const { onModal, offModal } = popSlice.actions;
 
-export const setModalPopStateAction = (payload: IPopState): Action => setModalPopState(payload);
+export const onModalAction = (card: ICard): Action => onModal(card);
+export const offModalAction = (): Action => offModal(null);
 
 export default popSlice.reducer;
