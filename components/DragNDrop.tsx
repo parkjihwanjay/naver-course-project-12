@@ -85,7 +85,7 @@ const DragNDrop: React.FC<IProps> = ({
     e.stopPropagation();
     const target = e.currentTarget;
 
-    if (target.className === 'dndGroup') {
+    if (target.className.includes('dndGroup')) {
       dragColumn.current = { column, cardIndex, columnIndex };
       dragColumnNode.current = target;
       setDragging(false);
@@ -101,7 +101,7 @@ const DragNDrop: React.FC<IProps> = ({
     if (dragging) {
       const target = e.currentTarget;
       if (dragItemNode.current === target) return;
-      if (column.items.length && target.className === 'dndGroup') return;
+      if (column.items.length && target.className.includes('dndGroup')) return;
       if (dragItemNode.current.dataset.id === target.dataset.id) return;
       const dragColumnIndex = dragItem.current.columnIndex;
       const dragItemCardIndex = dragItem.current.cardIndex;
