@@ -14,7 +14,7 @@ export interface ICard extends ICardInitial {
 export interface ICardInitial {
   title: string;
   content: string;
-  date: Date;
+  date: string;
 }
 
 export interface IUpdateCard {

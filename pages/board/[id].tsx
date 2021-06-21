@@ -5,22 +5,13 @@ import { setModalPopStateAction } from '@/store/modules/PopModal';
 import { useRouter } from 'next/router';
 import { setJwtTokenAction } from '@/store/modules/User';
 import BoardComponent from '@/components/Board';
+import Modal from '@/components/Modal';
 import { initializeThunk } from '../../store/modules/Board';
 
 const Board: React.FC = () => {
-  const { dispatch } = useRedux();
+  const { dispatch, useAppSelector } = useRedux();
+  const modalState = useAppSelector((state) => state.pop.modalState);
   const router = useRouter();
-  const popModal = (
-    modalState: boolean,
-    columnId: string,
-    cardId: string,
-    cardTitle: string,
-    cardContent: string,
-    cardDate: Date,
-    cardLabel: string,
-  ) => {
-    dispatch(setModalPopStateAction({ modalState, columnId, cardId, cardTitle, cardContent, cardDate, cardLabel }));
-  };
   useEffect(() => {
     const jwtToken = localStorage.getItem('jwtToken');
     if (jwtToken) dispatch(setJwtTokenAction(localStorage.getItem('jwtToken')));
@@ -33,7 +24,8 @@ const Board: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <BoardComponent popModal={popModal} />
+        <BoardComponent />
+        {modalState && <Modal />}
       </header>
     </div>
   );

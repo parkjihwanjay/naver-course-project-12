@@ -7,18 +7,6 @@ import styles from './Board.module.css';
 import List from '../List';
 import { IBoard } from '../../interfaces/IBoard';
 
-interface IProps {
-  popModal: (
-    modalState: boolean,
-    columnId: string,
-    cardId: string,
-    cardTitle: string,
-    cardContent: string,
-    cardDate: Date,
-    cardLabel: string,
-  ) => void;
-}
-
 interface IDragParams {
   list: IList;
   listIndex: number;
@@ -31,7 +19,7 @@ const preventEvent = (e: SyntheticEvent) => {
   e.preventDefault();
 };
 
-const Board: React.FC<IProps> = ({ popModal }) => {
+const Board: React.FC = () => {
   const { dispatch, useAppSelector } = useRedux();
   const board = useAppSelector((state) => state.board);
 

@@ -10,6 +10,7 @@ import { setCardEditingStateAction } from '@/store/modules/Editing';
 import styles from './Card.module.css';
 import { IList } from '../../interfaces/IList';
 import useRedux from '../../hooks/redux';
+import { onModalAction } from '../../store/modules/PopModal';
 
 const cx = classNames.bind(styles);
 
@@ -46,6 +47,7 @@ const Card: React.FC<IProps> = ({ list, listIndex, card, cardIndex, dragging, ge
         onDragOver={(e) => e.preventDefault()}
         onDragEnd={initialize}
         onDrop={(e) => dispatch(dragThunk())}
+        onClick={() => dispatch(onModalAction(card))}
       >
         <div className={cx('labels')}>
           <div className={cx(`${card.labels}`)} />
@@ -56,7 +58,7 @@ const Card: React.FC<IProps> = ({ list, listIndex, card, cardIndex, dragging, ge
               defaultValue={card.content}
               handleItemSave={(newContent) =>
                 dispatch(
-                  editCardThunk(card.id, {
+                  editCardThunk(list.id, card.id, {
                     content: newContent,
                   }),
                 )
