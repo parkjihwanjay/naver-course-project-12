@@ -61,7 +61,7 @@ const Board: React.FC<IProps> = ({ popModal }) => {
     e.stopPropagation();
     const target = e.currentTarget;
 
-    if (target.className === 'dndGroup') {
+    if (target.className.includes('dndGroup')) {
       dragList.current = { list, cardIndex, listIndex };
       dragListNode.current = target;
       setDragging(false);
@@ -77,7 +77,7 @@ const Board: React.FC<IProps> = ({ popModal }) => {
     if (dragging) {
       const target = e.currentTarget;
       if (dragCardNode.current === target) return;
-      if (list.cards.length && target.className === 'dndGroup') return;
+      if (list.cards.length && target.className.includes('dndGroup')) return;
       if (dragCardNode.current.dataset.id === target.dataset.id) return;
       const dragListIndex = dragCard.current.listIndex;
       const dragCardIndex = dragCard.current.cardIndex;
