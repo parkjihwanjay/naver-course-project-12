@@ -45,7 +45,7 @@ const Home: React.FC = () => {
     dispatch(setModalPopStateAction({ modalState, columnId, cardId, cardTitle, cardContent, cardDate, cardLabel }));
   };
   const addCard = (columnId: string, content: string) => {
-    dispatch(addCardThunk(columnId, content));
+    dispatch(addCardThunk({ columnId, content }));
   };
   const deleteCard = (columnId, id) => {
     dispatch(deleteCardAction({ columnId, id }));
