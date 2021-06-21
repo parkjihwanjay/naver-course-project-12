@@ -13,7 +13,7 @@ interface IProps {
   addCard: (columnId: string, content: string) => void;
   deleteCard: (columnId: string, id: string) => void;
   editCardStart: (id: string) => void;
-  editCardSave: (columnId: string, cardId: string, content: string) => void;
+  editCardSave: (columnId: string, cardId: string, title: string) => void;
   editColumnStart: (id: string) => void;
   editColumnSave: (id: string, newTitle: string) => void;
   popModal: (
@@ -143,8 +143,8 @@ const DragNDrop: React.FC<IProps> = ({
   const handleEditCardStart = (id: string): void => {
     editCardStart(id);
   };
-  const handleEditCardSave = (columnId: string, cardId: string, content: string): void => {
-    editCardSave(columnId, cardId, content);
+  const handleEditCardSave = (columnId: string, cardId: string, title: string): void => {
+    editCardSave(columnId, cardId, title);
   };
   const initialize = (e: SyntheticEvent): void => {
     e.preventDefault();

@@ -53,8 +53,8 @@ const Home: React.FC = () => {
   const editCardStart = (id: string) => {
     dispatch(setCardEditingStateAction(id));
   };
-  const editCardSave = (columnId: string, cardId: string, content: string) => {
-    dispatch(editCardSaveThunk({ columnId, cardId, content }));
+  const editCardSave = (columnId: string, cardId: string, title: string) => {
+    dispatch(editCardSaveThunk({ columnId, cardId, title }));
   };
   const handleDragCard = (payload: dragCardDTO) => {
     dispatch(dragCardAction(payload));

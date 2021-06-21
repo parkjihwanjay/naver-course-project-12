@@ -80,7 +80,9 @@ const reducers: CreateSliceOptions['reducers'] = {
     const { cardId, columnId, title, content, lable, date } = action.payload;
     const editColumn = findById<IColumn>(state, columnId).item;
     const editCard = findById<ICard>(editColumn.items, cardId).item;
-    updateValues<ICard>(editCard, { cardId, title, content, lable, date });
+    const toBeChanged = { cardId, title, content, lable, date };
+    Object.keys(toBeChanged).forEach((key) => toBeChanged[key] === undefined && delete toBeChanged[key]);
+    updateValues<ICard>(editCard, toBeChanged);
   },
   dragCard: (state: ICardList, action: PayloadAction<IDragCardPayload>) => {
     const { columnIndex, cardIndex, dragColumnIndex, dragItemCardIndex } = action.payload;

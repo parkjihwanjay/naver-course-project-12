@@ -34,7 +34,7 @@ interface IProps {
   handleDragEnter: (e: ReactDragEvent, { column, cardIndex, columnIndex }: IDragParams) => void;
   handleCardDrop: (e: SyntheticEvent) => void;
   handleEditCardStart: (id: string) => void;
-  handleEditCardSave: (columnId: string, cardId: string, content: string) => void;
+  handleEditCardSave: (columnId: string, cardId: string, title: string) => void;
   handlePopModal: (
     modalState: boolean,
     columnId: string,
@@ -92,9 +92,9 @@ const Card: React.FC<IProps> = ({
           onClick={(e) => handlePopModal(pop.modalState, column.id, card.id, card.title, card.content, card.date, card.label)}
         >
           {editing.cardId === card.id ? (
-            <TextInput defaultValue={card.content} handleItemSave={(newContent) => handleEditCardSave(column.id, card.id, newContent)} />
+            <TextInput defaultValue={card.title} handleItemSave={(newTitle) => handleEditCardSave(column.id, card.id, newTitle)} />
           ) : (
-            <div>{card.content}</div>
+            <div>{card.title}</div>
           )}
         </div>
         <div className={cx('icons')}>
