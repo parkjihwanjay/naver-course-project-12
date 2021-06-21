@@ -1,8 +1,10 @@
 import React, { SyntheticEvent, useRef } from 'react';
 import Card from '@/components/Card';
+import TextInput from '@/components/TextInput';
 import { IconButton, Button } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import classNames from 'classnames/bind';
+import { setListEditingStateAction } from '@/store/modules/Editing';
 import styles from './List.module.css';
 import { IList } from '../../interfaces/IList';
 import useRedux from '../../hooks/redux';
@@ -49,7 +51,7 @@ const List: React.FC<IProps> = ({ list, listIndex, dragging, getStyles, handleDr
           {editing.columnId === list.id ? (
             <TextInput defaultValue={list.title} handleItemSave={(newTitle) => dispatch(editListThunk(list.id, { title: newTitle }))} />
           ) : (
-            <div onClick={(e) => handleEditColumnStart(list.id)}>{list.title}</div>
+            <div onClick={() => dispatch(setListEditingStateAction(list.id))}>{list.title}</div>
           )}
         </div>
         <div className={cx('icons')}>
