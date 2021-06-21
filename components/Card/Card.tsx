@@ -47,7 +47,10 @@ const Card: React.FC<IProps> = ({ list, listIndex, card, cardIndex, dragging, ge
         onDragOver={(e) => e.preventDefault()}
         onDragEnd={initialize}
         onDrop={(e) => dispatch(dragThunk())}
-        onClick={() => dispatch(onModalAction(card))}
+        onClick={(e) => {
+          if (e.target.nodeName !== 'DIV') return;
+          dispatch(onModalAction(card));
+        }}
       >
         <div className={cx('labels')}>
           <div className={cx(`${card.labels}`)} />
@@ -58,7 +61,7 @@ const Card: React.FC<IProps> = ({ list, listIndex, card, cardIndex, dragging, ge
               defaultValue={card.title}
               handleItemSave={(newTitle) =>
                 dispatch(
-                  editCardThunk(card.id, {
+                  editCardThunk(list.id, card.id, {
                     title: newTitle,
                   }),
                 )
@@ -69,10 +72,24 @@ const Card: React.FC<IProps> = ({ list, listIndex, card, cardIndex, dragging, ge
           )}
         </div>
         <div className={cx('icons')}>
-          <IconButton aria-label="delete" size="small" onClick={() => dispatch(deleteCardThunk(list.id, card.id))}>
+          <IconButton
+            aria-label="delete"
+            date-icon="delete"
+            size="small"
+            onClick={(e) => {
+              dispatch(deleteCardThunk(list.id, card.id));
+            }}
+          >
             <DeleteIcon />
           </IconButton>
-          <IconButton aria-label="edit" size="small" onClick={() => dispatch(setCardEditingStateAction(card.id))}>
+          <IconButton
+            aria-label="edit"
+            date-icon="button"
+            size="small"
+            onClick={(e) => {
+              dispatch(setCardEditingStateAction(card.id));
+            }}
+          >
             <EditIcon />
           </IconButton>
         </div>
